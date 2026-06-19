@@ -1,0 +1,6 @@
+Em AdminPanelProvider, em $panel
+->font('nome da fonte') //Altera a fonte
+->passwordReset() //Acrescenta no reset senha no login
+->revealablePasswords(false) //Tira o olhinho do password
+
+Super esposa

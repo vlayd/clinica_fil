@@ -1,0 +1,51 @@
+1 - Criar projeto laravel:
+composer create-project laravel/laravel example-app
+
+2 - Instalar o filamento dentro do projeto o painelProvider:
+composer require filament/filament:"~5.0"
+php artisan filament:install --panels
+
+3 - Criar o banco de dados e ir em database do laravel:
+'database' => env('DB_DATABASE', 'clinica'),
+'username' => env('DB_USERNAME', 'admin'),
+'password' => env('DB_PASSWORD', 'adm#@!'),
+
+4 - Por file em:
+APP_MAINTENANCE_DRIVER, SESSION_DRIVER, CACHE_STORE
+
+5 - Fazer o migrate para criar o primeira tabela user
+php artisan migrate
+
+6 - Criar o primeiro usuário do banco de dados:
+php artisan make:filament-user Vlaydisson Valóis de Melo vlaydisson@gmail.com 123
+
+7 - Instalar o npm:
+npm install
+
+8 - Criar inicialização do servidor e run dev dentro da pasta raiz do projeto .bat:
+php artisan serve --host=10.26.9.232 --port=8000 ou
+php artisan serve --host=localhost --port=8000
+npm run dev
+
+9 - Publicar as configurações e vai ser criado config/filament.php:
+php artisan vendor:publish --tag=filament-config
+
+10 - Se não tiver página inicial, em web.php:
+Route::get('/', function () {
+    return redirect('/admin');
+});
+
+11 - No model User:
+use Override;
+implements FilamentUser
+#[Override]
+    public function canAccessPanel(Panel $panel): bool
+    {
+        $active = $this->active;
+        if (!$active) {
+            Filament::auth()->logout();
+            session()->invalidate();
+            session()->regenerateToken();
+        }
+        return $active;
+    }
