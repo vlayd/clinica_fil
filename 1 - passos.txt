@@ -49,3 +49,10 @@ implements FilamentUser
         }
         return $active;
     }
+
+12 - Para criar resource com o (create, edit, list, form e table):
+    php artisan make:filament-resource NomeDoModel
+    Perguntando:
+    a) Title Attribute: NomeDoModel List;
+    b) Read-only (info list, que é a página de detalhe do item): yes ou no;
+    c) Criar config de acordo com as coluns da tabela, a listagem? yes (É melhor);

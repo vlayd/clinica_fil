@@ -2,5 +2,37 @@ Em AdminPanelProvider, em $panel
 ->font('nome da fonte') //Altera a fonte
 ->passwordReset() //Acrescenta no reset senha no login
 ->revealablePasswords(false) //Tira o olhinho do password
+->sidebarCollapsibleOnDesktop() //Para contrair a sidebar
+->sidebarFullyCollapsibleOnDesktop() //Se transforma de menu sanduiche
+->topNavigation() //Os menus ficam em cima e não do lado
+->profile() //Vai aparecer o opção do profile para editar o perfil logado
+->brandLogo(asset('images/person_login.png')) //Logo
+->brandName('Clínicas') //Nome da sidebar
+->brandLogoHeight('3rem')
+->colors() //Só pedir o google para criar a sua
+->favicon()
+->sidebarWidth('15rem') //Largura da sidebar (esquerda)
+->maxContentWidth(Width::Full) //Largura do conteúdo (direita)
+->spa() //Single Page Aplication. Os menus abrem rápido, sem reload
 
-Super esposa
+Em ModelResource (cada model tem a sua):
+    protected static ?string $navigationLabel = 'Usuários'; // Alterar o texto na sidebar
+    protected static ?int $navigationSort = 1; // A ordem na sidebar, no caso será o 1, dashbard sempre é o primeiro
+
+No terminal
+    php artisan make:filament-theme nomePainel //Criar um tema custom
+        Obs.: Em vite.config.js, em input: ['...', '...', 'resources/css/filament/admin/theme.css'], caso na tenha acresente no último
+        Obs.: Em AdminPanelProvider ->viteTheme('resources/css/filament/admin/theme.css')
+        Em theme.css, por exemplo, altera a cor da side bar:
+            .fi-sidebar {
+                @apply bg-gray-50 dark:bg-gray-900;
+            }
+
+Em ModelTable (cada model tem a sua):
+ Para active, sendo 0: não e 1: sim, assim fica bem profissional:
+    Em TextColumn::make('active'):
+        ->label('Ativo')
+        ->alignCenter()
+        ->badge()
+        ->color(fn(bool $state): string => $state ? 'success' : 'danger')
+        ->formatStateUsing(fn(bool $state): string => $state ? 'Sim' : 'Não'),
