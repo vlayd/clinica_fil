@@ -1,17 +1,20 @@
 <?php
 
-namespace App\Filament\Resources\Users\Tables;
+namespace App\Filament\Resources\Employes\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreAction;
+use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
-class UsersTable
+class EmployesTable
 {
     public static function configure(Table $table): Table
     {
@@ -19,28 +22,17 @@ class UsersTable
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),
-                TextColumn::make('email')
-                    ->label('E-mail')
-                    ->searchable(),
-                TextColumn::make('active')
-                    ->label('Ativo')
+                TextColumn::make('cpf')
+                    ->label('CPF')
                     ->alignCenter()
-                    ->badge()
-                    ->color(fn(bool $state): string => $state ? 'success' : 'danger')
-                    ->formatStateUsing(fn(bool $state): string => $state ? 'Sim' : 'Não'),
-                TextColumn::make('created_at')
-                    ->label('Data de criação')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->label('Data de atualização')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->searchable(),
+                TextColumn::make('birth')
+                    ->label('Nascimento')
+                    ->alignCenter()
+                    ->searchable(),
             ])
             ->filters([
-                //
+                TrashedFilter::make(),
             ])
             ->recordActions([
                 ViewAction::make()->label('')->iconButton()->color('primary'),
@@ -51,6 +43,8 @@ class UsersTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
                 ]),
             ]);
     }

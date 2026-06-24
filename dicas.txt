@@ -18,6 +18,10 @@ Em AdminPanelProvider, em $panel
 Em ModelResource (cada model tem a sua):
     protected static ?string $navigationLabel = 'Usuários'; // Alterar o texto na sidebar
     protected static ?int $navigationSort = 1; // A ordem na sidebar, no caso será o 1, dashbard sempre é o primeiro
+    public static function getModelLabel(): string // Alterar o texto no título da lista
+    {
+        return __('User');
+    }
 
 No terminal
     php artisan make:filament-theme nomePainel //Criar um tema custom
@@ -36,3 +40,31 @@ Em ModelTable (cada model tem a sua):
         ->badge()
         ->color(fn(bool $state): string => $state ? 'success' : 'danger')
         ->formatStateUsing(fn(bool $state): string => $state ? 'Sim' : 'Não'),
+
+No model:
+    Para soft delete:
+        Dentro da classe -> user SoftDeletes;
+
+No ListModel:
+    Tabs na labela:
+     #[Override]
+    public function getTabs(): array
+    {
+        return [
+            'todos' => Tab::make(label: 'Todos')
+                ->icon(Heroicon::ListBullet)
+                ->badge(User::count())
+                ->modifyQueryUsing(fn(Builder $query) => $query),
+            'ativos' => Tab::make(label: 'Ativos')
+                ->icon(Heroicon::CheckCircle)
+                ->badge(User::where('active', 1)->count())
+                ->badgeColor('success')
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('active', true)),
+            'inativos' => Tab::make(label: 'Inativos')
+                ->badge(User::where('active', 0)->count())
+                ->badgeColor('danger')
+                ->icon(Heroicon::XCircle)
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('active', false))
+                ->deferBadge(); //Para não atualizar ao clicar, só atualizar com refresh da página
+        ];
+    }

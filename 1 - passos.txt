@@ -56,3 +56,6 @@ implements FilamentUser
     a) Title Attribute: NomeDoModel List;
     b) Read-only (info list, que é a página de detalhe do item): yes ou no;
     c) Criar config de acordo com as coluns da tabela, a listagem? yes (É melhor);
+
+13 - Criar o resource da model
+    php artisan make:filament-resource NomeDaModel

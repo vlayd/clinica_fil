@@ -6,20 +6,20 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Filament\Facades\Filament;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Override;
 
-#[Fillable(['name', 'email', 'password', 'active'])]
-#[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
+
+    protected $fillable = ['name', 'email', 'password', 'active'];
+
 
     /**
      * Get the attributes that should be cast.
@@ -33,7 +33,6 @@ class User extends Authenticatable implements FilamentUser
             'password' => 'hashed',
         ];
     }
-
 
     #[Override]
     public function canAccessPanel(Panel $panel): bool
