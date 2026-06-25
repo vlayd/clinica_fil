@@ -9,19 +9,21 @@ use Filament\Actions\EditAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class UsersTable
 {
     public static function configure(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn(Builder $query) => $query->whereNot('id', Auth::id()))
             ->columns([
                 TextColumn::make('name')
-                    ->searchable(),
+                    ->label('Nome'),
                 TextColumn::make('email')
-                    ->label('E-mail')
-                    ->searchable(),
+                    ->label('E-mail'),
                 TextColumn::make('active')
                     ->label('Ativo')
                     ->alignCenter()

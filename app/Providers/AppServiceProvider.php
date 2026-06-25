@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Text
+        TextColumn::configureUsing(function (TextColumn $textColumn) {
+
+            if (Str::contains($textColumn->getName(), ['created_at', 'updated_at', 'birth'])) {
+                $textColumn->date('d/m/Y');
+            }
+
+            if (Str::contains($textColumn->getName(), ['status'])) {
+                $textColumn->badge();
+            }
+
+            if (Str::contains($textColumn->getName(), ['title', 'name', 'email'])) {
+                $textColumn->searchable()->sortable();
+            }
+        });
     }
 }

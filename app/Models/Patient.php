@@ -5,9 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Employe extends Model
+class Patient extends Model
 {
     use SoftDeletes;
-
-    protected $fillable = ['name', 'image', 'email', 'password', 'active'];
 }

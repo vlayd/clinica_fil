@@ -32,6 +32,8 @@ No terminal
                 @apply bg-gray-50 dark:bg-gray-900;
             }
 
+    php artisan make:migration add_rule_to_user_table //Adicionar coluna na tabela de dados
+
 Em ModelTable (cada model tem a sua):
  Para active, sendo 0: não e 1: sim, assim fica bem profissional:
     Em TextColumn::make('active'):
@@ -68,3 +70,22 @@ No ListModel:
                 ->deferBadge(); //Para não atualizar ao clicar, só atualizar com refresh da página
         ];
     }
+
+Icons:
+    a) Fontawesome 5
+    composer require owenvoke/blade-fontawesome
+
+    User: Ex.: fas-hospital-user
+
+Observações:
+    Remover plugin instalado pelo composer:
+        composer remove vendor/pacote
+
+        Limpeza geral
+            php artisan config:clear
+            php artisan route:clear
+            php artisan cache:clear
+
+            composer dump-autoload
+
+
