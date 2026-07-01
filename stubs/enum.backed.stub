@@ -1,0 +1,17 @@
+<?php
+
+namespace {{ namespace }};
+
+use BackedEnum;
+use Filament\Support\Contracts\HasLabel;
+use Illuminate\Contracts\Support\Htmlable;
+
+enum {{ class }}: {{ type }} implements HasLabel
+{
+    //cases
+
+    public function getLabel(): string|Htmlable|null
+    {
+        return __($this->name);
+    }
+}

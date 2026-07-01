@@ -18,7 +18,7 @@ class UsersTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn(Builder $query) => $query->whereNot('id', Auth::id()))
+            ->modifyQueryUsing(fn(Builder $query) => $query->whereNot('id', Auth::id())->whereNot('password', null))
             ->columns([
                 TextColumn::make('name')
                     ->label('Nome'),

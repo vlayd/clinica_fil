@@ -10,6 +10,7 @@ use App\Filament\Resources\Patients\Schemas\PatientForm;
 use App\Filament\Resources\Patients\Schemas\PatientInfolist;
 use App\Filament\Resources\Patients\Tables\PatientsTable;
 use App\Models\Patient;
+use App\Models\User;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -21,7 +22,7 @@ use UnitEnum;
 
 class PatientResource extends Resource
 {
-    protected static ?string $model = Patient::class;
+    protected static ?string $model = User::class;
 
     protected static string|BackedEnum|null $navigationIcon = 'fas-address-book';
 

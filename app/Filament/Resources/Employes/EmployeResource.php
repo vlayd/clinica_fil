@@ -9,7 +9,7 @@ use App\Filament\Resources\Employes\Pages\ViewEmploye;
 use App\Filament\Resources\Employes\Schemas\EmployeForm;
 use App\Filament\Resources\Employes\Schemas\EmployeInfolist;
 use App\Filament\Resources\Employes\Tables\EmployesTable;
-use App\Models\Employe;
+use App\Models\User;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -22,7 +22,7 @@ use Override;
 
 class EmployeResource extends Resource
 {
-    protected static ?string $model = Employe::class;
+    protected static ?string $model = User::class;
 
     // protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
     protected static string|BackedEnum|null $navigationIcon = 'fas-hospital-user';

@@ -9,6 +9,7 @@ use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,8 +21,13 @@ class EmployesTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn(Builder $query) => $query->where('user_id', null)->orWhereNot('user_id', Auth::id()))
+            ->modifyQueryUsing(fn(Builder $query) => $query->whereNot('id', Auth::id())->whereNot('rule', 0))
             ->columns([
+                ImageColumn::make('photo')
+                    ->disk('public')
+                    ->label('Foto')
+                    ->circular()
+                    ->alignCenter(),
                 TextColumn::make('name'),
                 TextColumn::make('cpf')
                     ->label('CPF')

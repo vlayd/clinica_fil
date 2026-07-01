@@ -9,6 +9,7 @@ use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Override;
 
 class ListUsers extends ListRecords
@@ -26,20 +27,15 @@ class ListUsers extends ListRecords
     public function getTabs(): array
     {
         return [
-            'todos' => Tab::make(label: 'Todos')
+            'funcionarios' => Tab::make(label: 'Funcionários')
                 ->icon(Heroicon::ListBullet)
-                ->badge(User::count())
-                ->modifyQueryUsing(fn(Builder $query) => $query),
-            'ativos' => Tab::make(label: 'Ativos')
+                ->badge(User::whereNot('id', Auth::id())->whereNot('password', null)->whereNot('rule', 0)->count())
+                ->modifyQueryUsing(fn(Builder $query) => $query->whereNot('rule', 0)),
+            'clientes' => Tab::make(label: 'Clientes')
                 ->icon(Heroicon::CheckCircle)
-                ->badge(User::where('active', 1)->count())
+                ->badge(User::whereNot('id', Auth::id())->whereNot('password', null)->where('rule', 0)->count())
                 ->badgeColor('success')
-                ->modifyQueryUsing(fn(Builder $query) => $query->where('active', true)),
-            'inativos' => Tab::make(label: 'Inativos')
-                ->badge(User::where('active', 0)->count())
-                ->badgeColor('danger')
-                ->icon(Heroicon::XCircle)
-                ->modifyQueryUsing(fn(Builder $query) => $query->where('active', false))
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('rule', 0)),
         ];
     }
 }

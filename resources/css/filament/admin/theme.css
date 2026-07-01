@@ -6,3 +6,12 @@
 .fi-sidebar {
     @apply  border-r border-gray-200 dark:border-gray-600;
 }
+
+/* .filepond--root {
+    width: 200px;
+    height: 200px;
+} */
+
+/* .filepond--image-preview-wrapper {
+    @apply w-12 h-12;
+} */
