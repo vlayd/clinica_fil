@@ -3,15 +3,18 @@
 namespace App\Filament\Resources\Employes\Schemas;
 
 use App\Enums\BrazilianState;
-use Filament\Forms\Components\FileUpload;
+use App\Enums\UserStatus;
+use App\Filament\Resources\Helpers\FormHelper;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
-use Illuminate\Validation\Rule;
 
 class EmployeForm
 {
@@ -22,20 +25,12 @@ class EmployeForm
             ->components([
                 Section::make('Detalhes Pessoais')
                     ->schema([
-                        FileUpload::make('photo')->imagePreviewHeight('350')
-                            ->disk('public')
-                            // ->preserveFilenames() // Preserve the original file name
-                            ->directory('users/fotos')
-                            ->image()->extraAttributes(['class' => 'w-1/6 mx-auto'])
-                            ->label('Foto'),
+                        FormHelper::inputImageUpload(),
                         Group::make([
                             TextInput::make('name')
                                 ->required()
                                 ->label('Nomes'),
-                            TextInput::make('cpf')
-                                ->required()
-                                ->label('CPF')
-                                ->disabled(),
+                            FormHelper::inputCpf(),
                             TextInput::make('birth')
                                 ->required()->type('date')
                                 ->label('Nascimento'),
@@ -88,18 +83,26 @@ class EmployeForm
                                 ])->columns(6),
                         ]),
                     ]),
-                    Section::make('Informações de Acesso')
+                Section::make('Informações de Acesso')
                     ->schema([
-                        TextInput::make('email')
-                            ->email()
-                            ->required()
-                            ->unique(ignoreRecord: true)
-                            ->label('E-mail'),
-                        TextInput::make('password')
-                            ->password()
-                            ->required()
-                            ->label('Senha'),
+                        Group::make([
+                            TextInput::make('email')
+                                ->email()
+                                ->required()
+                                ->unique(ignoreRecord: true)
+                                ->label('E-mail'),
+                            ToggleButtons::make('active')->label('Usuário')->default(UserStatus::Não)->inline()
+                                ->options(UserStatus::class),
+                        ])->columns(2),
                     ]),
+                Hidden::make('password')->default(function (Get $get) {
+                    // Se o valor do hidden atual for nulo, busca o valor do outro input
+                    return $get('password') ?? preg_replace('/[^0-9]/', '', $get('cpf'));
+                })
+                    ->dehydrateStateUsing(function ($state, Get $get) {
+                        // Garante que o dado salvo não seja nulo caso o usuário não interaja
+                        return $state ?? preg_replace('/[^0-9]/', '', $get('cpf'));
+                    }),
             ]);
     }
 }

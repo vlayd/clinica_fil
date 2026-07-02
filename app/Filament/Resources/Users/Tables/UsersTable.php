@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
+use App\Filament\Resources\Helpers\TableHelper;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -9,6 +10,7 @@ use Filament\Actions\EditAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
@@ -24,12 +26,12 @@ class UsersTable
                     ->label('Nome'),
                 TextColumn::make('email')
                     ->label('E-mail'),
-                TextColumn::make('active')
+                ToggleColumn::make('active')
                     ->label('Ativo')
-                    ->alignCenter()
-                    ->badge()
-                    ->color(fn(bool $state): string => $state ? 'success' : 'danger')
-                    ->formatStateUsing(fn(bool $state): string => $state ? 'Sim' : 'Não'),
+                    ->alignCenter(),
+                    // ->badge()
+                    // ->color(fn(bool $state): string => $state ? 'success' : 'danger')
+                    // ->formatStateUsing(fn(bool $state): string => $state ? 'Sim' : 'Não'),
                 TextColumn::make('created_at')
                     ->label('Data de criação')
                     ->dateTime()
@@ -44,12 +46,7 @@ class UsersTable
             ->filters([
                 //
             ])
-            ->recordActions([
-                ViewAction::make()->label('')->iconButton()->color('primary'),
-                EditAction::make()->label('')->iconButton()->color('warning'),
-                DeleteAction::make()->label('')->iconButton()->color('danger'),
-                RestoreAction::make()->label('')->iconButton()->color('danger'),
-            ])
+            ->recordActions(TableHelper::recordActions())
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

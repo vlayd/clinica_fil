@@ -2,19 +2,15 @@
 
 namespace App\Filament\Resources\Patients\Tables;
 
+use App\Filament\Resources\Helpers\TableHelper;
 use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
-use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
-use Filament\Actions\ViewAction;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
 
 class PatientsTable
 {
@@ -37,12 +33,7 @@ class PatientsTable
             ->filters([
                 TrashedFilter::make(),
             ])
-            ->recordActions([
-                ViewAction::make()->label('')->iconButton()->color('primary'),
-                EditAction::make()->label('')->iconButton()->color('warning'),
-                DeleteAction::make()->label('')->iconButton()->color('danger'),
-                RestoreAction::make()->label('')->iconButton()->color('danger'),
-            ])
+            ->recordActions(TableHelper::recordActions())
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
