@@ -23,17 +23,17 @@ class AppServiceProvider extends ServiceProvider
     {
         TextColumn::configureUsing(function (TextColumn $textColumn) {
 
-            if (Str::contains($textColumn->getName(), ['created_at', 'updated_at', 'birth'])) {
-                $textColumn->date('d/m/Y')->alignCenter();
-            }
+            // if (Str::contains($textColumn->getName(), ['created_at', 'updated_at', 'birth'])) {
+            //     $textColumn->date('d/m/Y')->alignCenter();
+            // }
 
-            if (Str::contains($textColumn->getName(), ['status'])) {
-                $textColumn->badge();
-            }
+            // if (Str::contains($textColumn->getName(), ['status'])) {
+            //     $textColumn->badge();
+            // }
 
-            if (Str::contains($textColumn->getName(), ['cpf', 'name', 'email'])) {
-                $textColumn->searchable();
-            }
+            // if (Str::contains($textColumn->getName(), ['cpf', 'name', 'email'])) {
+            //     $textColumn->searchable();
+            // }
         });
     }
 }

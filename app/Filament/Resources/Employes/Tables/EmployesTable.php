@@ -22,7 +22,7 @@ class EmployesTable
                 TableHelper::columnName(),
                 TableHelper::columnCpf(),
                 TableHelper::columnEmail(),
-                TableHelper::columnDate('birth', 'Nascimento'),
+                TableHelper::columnBirthDiffDays(),
             ])
             ->filters([
                 TrashedFilter::make(),
