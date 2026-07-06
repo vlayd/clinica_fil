@@ -1,5 +1,4 @@
-INSERT INTO usuarios (name, birth, cpf, address_number, address_complement) VALUES
-INSERT INTO usuarios (name, birth, cpf, address_number, address_complement, created_at, updated_at) VALUES
+INSERT INTO users (name, email, birth, cpf, address_number, address_complement, created_at, updated_at) VALUES
 ('Alan Kardec', '1987-11-23', '151.251.351-51', '14', 'Casa 2', '2026-03-01 08:20:00', '2026-03-01 08:20:00'),
 ('Beatriz Ramos', '1993-05-14', '152.252.352-52', '890', 'Apto 104', '2026-03-02 10:15:00', '2026-05-10 14:30:00'),
 ('Caio Castro', '1990-09-02', '153.253.353-53', '45', 'Bloco G', '2026-03-03 11:40:00', '2026-03-03 11:40:00'),

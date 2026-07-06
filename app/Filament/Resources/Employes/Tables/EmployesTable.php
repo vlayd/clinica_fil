@@ -20,9 +20,12 @@ class EmployesTable
             ->columns([
                 TableHelper::columnImage(),
                 TableHelper::columnName(),
-                TableHelper::columnCpf(),
                 TableHelper::columnEmail(),
-                TableHelper::columnBirthDiffDays(),
+                TableHelper::columnIsUser(),
+                TableHelper::columnCpf()->toggleable(isToggledHiddenByDefault: true),
+                TableHelper::columnBirth()->toggleable(isToggledHiddenByDefault: true),
+                // TableHelper::columnBirthDiffDays()->toggleable(isToggledHiddenByDefault: true),
+                // TableHelper::columnBirthAge()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 TrashedFilter::make(),

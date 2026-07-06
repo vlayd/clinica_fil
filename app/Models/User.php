@@ -22,7 +22,9 @@ class User extends Authenticatable implements FilamentUser
     protected $fillable = [
                             'name',
                             'email',
+                            'email_verified_at',
                             'password',
+                            'rule',
                             'active',
                             'photo',
                             'cpf',
@@ -36,6 +38,7 @@ class User extends Authenticatable implements FilamentUser
                             'neighborhood',
                             'city',
                             'state',
+                            'last_login_at',
                             'zip_code'];
 
 
