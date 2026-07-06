@@ -116,8 +116,16 @@ class TableHelper
     {
         return IconColumn::make($make)
             ->alignCenter()
+            ->label('Usuário')
+            // ->boolean()
+            // ->trueIcon('fas-check-circle')
+            // ->falseIcon('fas-xmark-circle')
+            // ->trueColor('success')
+            // ->falseColor('danger')
+            ->tooltip(fn($state): string => !empty($state) ? 'É usuário' : 'Não é usuário')
+            ->searchable()
             ->sortable()
-            ->icon(fn($state) => empty($state) ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle');
+            ->icon(fn($state): string => !empty($state) ? 'fas-check-circle' : 'fas-times-circle');
     }
 
     public static function columnBirthDiffDays($make = 'birth')
