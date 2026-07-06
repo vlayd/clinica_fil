@@ -23,44 +23,6 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('addresses', function (Blueprint $table) {
-            $table->id();
-            $table->string('cep')->unique();
-            $table->string('logradouro');
-            $table->string('bairro');
-            $table->string('localidade');
-            $table->string('uf');
-            $table->string('estado');
-        });
-
-        Schema::create('employes', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('image')->nullable();
-            $table->string('birth')->nullable();
-            $table->string('cpf')->unique();
-            $table->foreignId('user_id')->constrained()->nullable();
-            $table->foreignId('address_id')->constrained()->nullable(); //<- Se a outra tabela, tiver o nome 'addresses', fica assim
-            $table->string('address_number')->nullable();
-            $table->string('address_complement')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
-        Schema::create('patients', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('image')->nullable();
-            $table->string('birth')->nullable();
-            $table->string('cpf')->unique();
-            $table->foreignId('user_id')->constrained()->nullable();
-            $table->foreignId('address_id')->constrained()->nullable(); //<- Se a outra tabela, tiver o nome 'addresses', fica assim
-            $table->string('address_number')->nullable();
-            $table->string('address_complement')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
@@ -84,9 +46,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
-        Schema::dropIfExists('patients');
-        Schema::dropIfExists('employes');
-        Schema::dropIfExists('addresses');
         Schema::dropIfExists('users');
     }
 };

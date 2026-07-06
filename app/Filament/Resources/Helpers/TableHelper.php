@@ -112,9 +112,9 @@ class TableHelper
         return TextColumn::make('birth')
             ->label('Aniversário')
             ->color(function ($state) {
-                self::diffInDays($state)['color'];
+                return self::diffInDays($state)['color'];
             })
-            ->alignCenter()
+            ->alignCenter()->dateTooltip('d/m')
             ->formatStateUsing(function ($state) {
                 return self::diffInDays($state)['text'];
             });
