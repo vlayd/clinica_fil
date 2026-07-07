@@ -122,11 +122,23 @@ class TableHelper
             // ->falseIcon('fas-xmark-circle')
             // ->trueColor('success')
             // ->falseColor('danger')
-            ->tooltip(fn($state): string => !empty($state) ? 'É usuário' : 'Não é usuário')
+            ->tooltip(function ($record): string {
+                $state = $record->active; // Assuming 'password' is the field name
+                return $state;
+
+            })
             ->searchable()
             ->sortable()
-            ->icon(fn($state): string => !empty($state) ? 'fas-check-circle' : 'fas-times-circle');
+            // ->icon(fn($state): string => !empty($state) ? 'fas-check-circle' : 'fas-times-circle');
+            ->icon(function ($record): string {
+                $state = $record->active; // Assuming 'password' is the field name
+                if (empty($state)) {
+                    return 'fas-check-circle';
+                }
+                    return 'fas-times-circle';
+            });
     }
+
 
     public static function columnBirthDiffDays($make = 'birth')
     {

@@ -32,7 +32,7 @@ class EmployeForm
                                 ->label('Nomes'),
                             FormHelper::inputCpf(),
                             TextInput::make('birth')
-                                ->required()->type('date')
+                                ->type('date')
                                 ->label('Nascimento'),
                         ])->columns(3),
                     ]),
@@ -41,7 +41,7 @@ class EmployeForm
                         Group::make([
                             Fieldset::make('Endereço')
                                 ->schema([
-                                    TextInput::make('address_cep')
+                                    TextInput::make('zip_code')
                                         ->live(false)
                                         ->afterStateUpdated(function (?string $state, Set $set) {
                                             $cep = preg_replace('/[^0-9]/', '', $state);
@@ -51,16 +51,16 @@ class EmployeForm
                                                 $data = json_decode($response, true);
 
                                                 if (isset($data['logradouro'])) {
-                                                    $set('address_logradouro', $data['logradouro']);
+                                                    $set('street', $data['logradouro']);
                                                 }
                                                 if (isset($data['bairro'])) {
-                                                    $set('address_bairro', $data['bairro']);
+                                                    $set('neighborhood', $data['bairro']);
                                                 }
                                                 if (isset($data['localidade'])) {
-                                                    $set('address_cidade', $data['localidade']);
+                                                    $set('city', $data['localidade']);
                                                 }
                                                 if (isset($data['uf'])) {
-                                                    $set('address_uf', $data['uf']);
+                                                    $set('state', $data['uf']);
                                                 }
                                             }
                                         })
@@ -76,7 +76,6 @@ class EmployeForm
                                         ->label('Cidade')
                                         ->columnSpan(2),
                                     Select::make('address_uf')
-                                        ->required()
                                         ->options(BrazilianState::class)
                                         ->label('UF')
                                         ->columnSpan(1)
@@ -95,13 +94,15 @@ class EmployeForm
                                 ->options(UserStatus::class),
                         ])->columns(2),
                     ]),
-                Hidden::make('password')->default(function (Get $get) {
-                    // Se o valor do hidden atual for nulo, busca o valor do outro input
-                    return $get('password') ?? preg_replace('/[^0-9]/', '', $get('cpf'));
-                })
+                Hidden::make('password')
                     ->dehydrateStateUsing(function ($state, Get $get) {
                         // Garante que o dado salvo não seja nulo caso o usuário não interaja
                         return $state ?? preg_replace('/[^0-9]/', '', $get('cpf'));
+                    }),
+                Hidden::make('rule')
+                    ->dehydrateStateUsing(function ($state) {
+                        // Garante que o dado salvo não seja nulo caso o usuário não interaja
+                        return $state ?? 1;
                     }),
             ]);
     }
