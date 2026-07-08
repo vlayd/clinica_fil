@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Override;
 
 class User extends Authenticatable implements FilamentUser
@@ -32,7 +33,7 @@ class User extends Authenticatable implements FilamentUser
                             'rg',
                             'phone',
                             'cellphone',
-                            'address',
+                            'street',
                             'number',
                             'complement',
                             'neighborhood',
@@ -64,6 +65,10 @@ class User extends Authenticatable implements FilamentUser
             session()->invalidate();
             session()->regenerateToken();
         }
+        DB::table('users')
+            ->where('id', $this->id)
+            ->update(['last_login_at' => now()]);
+
         return $active;
     }
 }

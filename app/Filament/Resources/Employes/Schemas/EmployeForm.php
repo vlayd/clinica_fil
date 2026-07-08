@@ -2,17 +2,13 @@
 
 namespace App\Filament\Resources\Employes\Schemas;
 
-use App\Enums\BrazilianState;
 use App\Enums\UserStatus;
 use App\Filament\Resources\Helpers\FormHelper;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ToggleButtons;
-use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 
@@ -39,57 +35,13 @@ class EmployeForm
                 Section::make('Contatos')
                     ->schema([
                         Group::make([
-                            Fieldset::make('Endereço')
-                                ->schema([
-                                    TextInput::make('zip_code')
-                                        ->live(false)
-                                        ->afterStateUpdated(function (?string $state, Set $set) {
-                                            $cep = preg_replace('/[^0-9]/', '', $state);
-                                            $url = "https://viacep.com.br/ws/{$cep}/json/";
-                                            if (strlen($cep) === 8) {
-                                                $response = file_get_contents($url);
-                                                $data = json_decode($response, true);
-
-                                                if (isset($data['logradouro'])) {
-                                                    $set('street', $data['logradouro']);
-                                                }
-                                                if (isset($data['bairro'])) {
-                                                    $set('neighborhood', $data['bairro']);
-                                                }
-                                                if (isset($data['localidade'])) {
-                                                    $set('city', $data['localidade']);
-                                                }
-                                                if (isset($data['uf'])) {
-                                                    $set('state', $data['uf']);
-                                                }
-                                            }
-                                        })
-                                        ->label('CEP')
-                                        ->columnSpan(3),
-                                    TextInput::make('address_logradouro')
-                                        ->label('Logradouro')
-                                        ->columnSpan(3),
-                                    TextInput::make('address_bairro')
-                                        ->label('Bairro')
-                                        ->columnSpan(3),
-                                    TextInput::make('address_cidade')
-                                        ->label('Cidade')
-                                        ->columnSpan(2),
-                                    Select::make('address_uf')
-                                        ->options(BrazilianState::class)
-                                        ->label('UF')
-                                        ->columnSpan(1)
-                                ])->columns(6),
+                            FormHelper::fieldAddressViaCep()
                         ]),
                     ]),
                 Section::make('Informações de Acesso')
                     ->schema([
                         Group::make([
-                            TextInput::make('email')
-                                ->email()
-                                ->required()
-                                ->unique(ignoreRecord: true)
-                                ->label('E-mail'),
+                            FormHelper::inputEmail(),
                             ToggleButtons::make('active')->label('Usuário')->default(UserStatus::Não)->inline()
                                 ->options(UserStatus::class),
                         ])->columns(2),

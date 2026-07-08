@@ -33,11 +33,13 @@ class AdminPanelProvider extends PanelProvider
             ->font('Be Vietnam Pro')
             ->brandLogo(asset('images/person_login.png'))
             ->brandLogoHeight('3rem')
-            ->spa()
+            ->spa() // Habilita o modo SPA (Single Page Application) para atualizações mais rápidas e suaves na interface do painel
             ->brandName('Clínicas')
             ->favicon(asset('images/favicon-48.png'))
             ->sidebarWidth('15rem')
             ->maxContentWidth(Width::ScreenTwoExtraLarge)
+            ->resourceEditPageRedirect('index') // Redireciona para a página de listagem após a edição
+            ->resourceCreatePageRedirect('index')// Redireciona para a página de listagem após a criação
             // ->maxContentWidth(Width::Full)
             ->sidebarCollapsibleOnDesktop()
             ->colors([

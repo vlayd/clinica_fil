@@ -21,7 +21,7 @@ class EmployesTable
                 TableHelper::columnImage(),
                 TableHelper::columnName(),
                 TableHelper::columnEmail(),
-                TableHelper::columnIsUser(),
+                TableHelper::columnActiveToggle(),
                 TableHelper::columnCpf()->toggleable(isToggledHiddenByDefault: true),
                 TableHelper::columnBirth()->toggleable(isToggledHiddenByDefault: true),
                 // TableHelper::columnBirthDiffDays()->toggleable(isToggledHiddenByDefault: true),

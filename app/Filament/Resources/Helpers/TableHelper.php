@@ -157,7 +157,7 @@ class TableHelper
     public static function columnActiveToggle($make = 'active')
     {
         return ToggleColumn::make($make)
-            ->label('Ativo')
+            ->label('Usuário')
             ->alignCenter();
     }
 
