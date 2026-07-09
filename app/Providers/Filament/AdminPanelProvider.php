@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use Filament\Enums\GlobalSearchPosition;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -30,6 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->login()
+            ->profile()
             ->font('Be Vietnam Pro')
             ->brandLogo(asset('images/person_login.png'))
             ->brandLogoHeight('3rem')
@@ -68,6 +70,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->globalSearchKeyBindings(['ctrl+f']) // Define tecla de atalho para por o foco
+            ->globalSearch(false, position: GlobalSearchPosition::Topbar); //Oculta a barra de pesquisa de pesquisa e define a posição dela
     }
 }

@@ -6,6 +6,7 @@ use App\Filament\Resources\Helpers\TableHelper;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\RecordActionsPosition;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
@@ -20,14 +21,12 @@ class UsersTable
                 TableHelper::columnImage(),
                 TableHelper::columnName(),
                 TableHelper::columnEmail(),
-                TableHelper::columnActiveToggle(),
-                TableHelper::columnCreatedAt(),
-                TableHelper::columnUpdatedAt(),
+                TableHelper::columnLastLoginAt(),
             ])
             ->filters([
                 //
             ])
-            ->recordActions(TableHelper::recordActions())
+            ->recordActions(TableHelper::recordActions([]))
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

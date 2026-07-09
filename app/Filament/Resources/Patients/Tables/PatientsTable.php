@@ -19,21 +19,17 @@ class PatientsTable
         return $table
             ->modifyQueryUsing(fn(Builder $query) => $query->where('rule', 0))
             ->columns([
-                TextColumn::make('name'),
-                TextColumn::make('cpf')
-                    ->label('CPF')
-                    ->alignCenter()
-                    ->searchable(),
-                TextColumn::make('birth')
-                    ->label('Nascimento')
-                    ->alignCenter()
-                    ->sortable()
-                    ->searchable(),
+                TableHelper::columnImage(),
+                TableHelper::columnName(),
+                TableHelper::columnEmail(),
+                TableHelper::columnActiveToggle(),
+                TableHelper::columnCpf()->toggleable(isToggledHiddenByDefault: true),
+                TableHelper::columnBirth()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 TrashedFilter::make(),
             ])
-            ->recordActions(TableHelper::recordActions())
+            ->recordActions(TableHelper::recordActions(['view', 'edit', 'delete', 'resetPassword']))
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

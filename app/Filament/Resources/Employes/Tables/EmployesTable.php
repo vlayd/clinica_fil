@@ -30,7 +30,7 @@ class EmployesTable
             ->filters([
                 TrashedFilter::make(),
             ])
-            ->recordActions(TableHelper::recordActions())
+            ->recordActions(TableHelper::recordActions(['view', 'edit', 'delete', 'resetPassword']))
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Helpers;
 
 use Carbon\Carbon;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\RestoreAction;
@@ -11,17 +12,60 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
+use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Hash;
 
 class TableHelper
 {
-    public static function recordActions()
+    public static function recordActions(array $buttons = ['view', 'edit', 'delete']): array
     {
-        return [
-            ViewAction::make()->label('')->iconButton()->color('primary'),
-            EditAction::make()->label('')->iconButton()->color('warning'),
-            DeleteAction::make()->label('')->iconButton()->color('danger'),
-            RestoreAction::make()->label('')->iconButton()->color('danger'),
+        $actionView = [];
+        $actions = [
+            'view' => ViewAction::make()->label('')->iconButton()->color('primary'),
+            'edit' => EditAction::make()->label('')->iconButton()->color('warning'),
+            'delete' => DeleteAction::make()->label('')->iconButton()->color('danger'),
+            'restore' => RestoreAction::make()->label('')->iconButton()->color('danger'),
+            'resetPassword' => Action::make('resetPassword')
+                ->label('')
+                ->tooltip('Resetar senha')
+                ->requiresConfirmation()
+                ->modalHeading('Redefinir senha?')
+                ->modalDescription('A senha do usuário será redefinida para os números do CPF. Deseja continuar?')
+                ->icon('fas-user-lock')
+                ->iconButton()
+                // ->disabled(true)
+                ->color('success')
+                ->modalSubmitActionLabel('Redefinir')
+                ->modalIcon('fas-key')
+                ->modalIconColor('warning')
+                ->action(function ($record) {
+                    // Remove caracteres especiais (pontos e traços) do CPF
+                    $cpfLimpo = preg_replace('/[^0-9]/', '', $record->cpf);
+
+                    if (empty($cpfLimpo)) {
+                        Notification::make()
+                            ->title('Erro ao resetar senha')
+                            ->body('O usuário não possui um CPF cadastrado ou válido.')
+                            ->danger()
+                            ->send();
+                        return;
+                    }
+
+                    // Atualiza a senha e salva
+                    $record->password = Hash::make($cpfLimpo);
+                    $record->save();
+
+                    Notification::make()
+                        ->title('Senha resetada com sucesso!')
+                        ->body('A nova senha é o CPF do usuário.')
+                        ->success()
+                        ->send();
+                })
         ];
+        foreach ($buttons as $button) {
+            $actionView[] = $actions[$button];
+        }
+        return $actionView;
     }
 
     public static function columnImage($make = 'photo')
@@ -85,6 +129,17 @@ class TableHelper
             ->sortable();
     }
 
+    public static function columnLastLoginAt($make = 'last_login_at')
+    {
+        return TextColumn::make($make)
+            ->placeholder('Nunca')
+            ->label('Último acesso')
+            ->since()
+            ->alignCenter()
+            ->isoDateTimeTooltip('LLL')
+            ->sortable();
+    }
+
     public static function columnUpdatedAt($make = 'updated_at')
     {
         return TextColumn::make($make)
@@ -125,7 +180,6 @@ class TableHelper
             ->tooltip(function ($record): string {
                 $state = $record->active; // Assuming 'password' is the field name
                 return $state;
-
             })
             ->searchable()
             ->sortable()
@@ -135,7 +189,7 @@ class TableHelper
                 if (empty($state)) {
                     return 'fas-check-circle';
                 }
-                    return 'fas-times-circle';
+                return 'fas-times-circle';
             });
     }
 

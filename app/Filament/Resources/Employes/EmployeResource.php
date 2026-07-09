@@ -13,9 +13,10 @@ use App\Models\User;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use UnitEnum;
 use Override;
@@ -25,6 +26,7 @@ class EmployeResource extends Resource
     protected static ?string $model = User::class;
 
     // protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
     protected static string|BackedEnum|null $navigationIcon = 'fas-hospital-user';
 
     protected static ?string $recordTitleAttribute = 'name';
@@ -76,5 +78,40 @@ class EmployeResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    // Define o que aparece na barra de busca
+    #[Override]
+    public static function getGlobalSearchResultTitle(Model $record): string|Htmlable
+    {
+        return $record->email;
+    }
+
+    // Define o que pode ser pesquisado, mas não aparece na barra de busca
+    #[Override]
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['email', 'cpf'];
+    }
+
+    // Define o que aparece na barra de busca como complemento
+    #[Override]
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        /** @var Users $record */
+        $details = [];
+
+        if($record->email) {
+            $details['email'] = $record->email;
+        }
+
+        return $details;
+    }
+
+    // Filtra o que deve ser pesquisa, no caso, não pode pesquisar administrador
+    #[Override]
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()->whereNot('rule', 1);
     }
 }

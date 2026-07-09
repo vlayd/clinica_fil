@@ -11,8 +11,10 @@ use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Filament\AvatarProviders\UiAvatarsProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Override;
 
 class User extends Authenticatable implements FilamentUser
@@ -70,5 +72,16 @@ class User extends Authenticatable implements FilamentUser
             ->update(['last_login_at' => now()]);
 
         return $active;
+    }
+
+     public function getFilamentAvatarUrl(): ?string
+    {
+        // Altere 'avatar_url' para o nome da coluna que você usa no banco
+        if ($this->photo) {
+            return  Storage::url('storage/users/photos/' . $this->photo);
+        }
+
+        // Gera um avatar padrão com as iniciais do nome caso não tenha foto
+        return (new UiAvatarsProvider())->get($this);
     }
 }

@@ -54,7 +54,7 @@ class EmployeForm
                 Hidden::make('rule')
                     ->dehydrateStateUsing(function ($state) {
                         // Garante que o dado salvo não seja nulo caso o usuário não interaja
-                        return $state ?? 1;
+                        return $state ?? 2;
                     }),
             ]);
     }
