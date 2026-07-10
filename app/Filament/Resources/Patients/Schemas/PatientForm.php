@@ -51,7 +51,7 @@ class PatientForm
                         // Garante que o dado salvo não seja nulo caso o usuário não interaja
                         return $state ?? preg_replace('/[^0-9]/', '', $get('cpf'));
                     }),
-                Hidden::make('rule')
+                Hidden::make('type')
                     ->dehydrateStateUsing(function ($state) {
                         // Garante que o dado salvo não seja nulo caso o usuário não interaja
                         return $state ?? 2;

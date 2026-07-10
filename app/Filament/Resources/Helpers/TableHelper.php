@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Helpers;
 
 use Carbon\Carbon;
 use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\RestoreAction;
@@ -32,6 +33,7 @@ class TableHelper
                 ->modalHeading('Redefinir senha?')
                 ->modalDescription('A senha do usuário será redefinida para os números do CPF. Deseja continuar?')
                 ->icon('fas-user-lock')
+                ->extraAttributes(['style' => 'margin-right: 55px;'])
                 ->iconButton()
                 // ->disabled(true)
                 ->color('success')
@@ -41,7 +43,6 @@ class TableHelper
                 ->action(function ($record) {
                     // Remove caracteres especiais (pontos e traços) do CPF
                     $cpfLimpo = preg_replace('/[^0-9]/', '', $record->cpf);
-
                     if (empty($cpfLimpo)) {
                         Notification::make()
                             ->title('Erro ao resetar senha')
@@ -60,7 +61,7 @@ class TableHelper
                         ->body('A nova senha é o CPF do usuário.')
                         ->success()
                         ->send();
-                })
+                }),
         ];
         foreach ($buttons as $button) {
             $actionView[] = $actions[$button];

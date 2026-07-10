@@ -11,16 +11,18 @@ use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Filament\Models\Contracts\HasAvatar;
 use Filament\AvatarProviders\UiAvatarsProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Override;
+use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, HasAvatar
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes, HasRoles;
 
     protected $fillable = [
                             'name',
@@ -77,11 +79,12 @@ class User extends Authenticatable implements FilamentUser
      public function getFilamentAvatarUrl(): ?string
     {
         // Altere 'avatar_url' para o nome da coluna que você usa no banco
-        if ($this->photo) {
-            return  Storage::url('storage/users/photos/' . $this->photo);
+        if (!empty($this->photo)) {
+            return  Storage::url($this->photo);
         }
 
         // Gera um avatar padrão com as iniciais do nome caso não tenha foto
-        return (new UiAvatarsProvider())->get($this);
+        // return  Storage::url('storage/images/no-foto2.png');
+        return asset('images/no-foto2.png');
     }
 }

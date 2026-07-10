@@ -26,11 +26,12 @@ class UsersTable
             ->filters([
                 //
             ])
-            ->recordActions(TableHelper::recordActions([]))
+            ->recordActions(
+                TableHelper::recordActions(['resetPassword']))
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                // BulkActionGroup::make([
+                //     DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 }

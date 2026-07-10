@@ -17,7 +17,7 @@ class PatientsTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn(Builder $query) => $query->where('rule', 0))
+            ->modifyQueryUsing(fn(Builder $query) => $query->where('type', 0))
             ->columns([
                 TableHelper::columnImage(),
                 TableHelper::columnName(),
@@ -29,7 +29,7 @@ class PatientsTable
             ->filters([
                 TrashedFilter::make(),
             ])
-            ->recordActions(TableHelper::recordActions(['view', 'edit', 'delete', 'resetPassword']))
+            ->recordActions(TableHelper::recordActions())
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

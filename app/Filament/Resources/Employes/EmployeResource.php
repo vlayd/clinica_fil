@@ -109,9 +109,9 @@ class EmployeResource extends Resource
     }
 
     // Filtra o que deve ser pesquisa, no caso, não pode pesquisar administrador
-    #[Override]
-    public static function getGlobalSearchEloquentQuery(): Builder
-    {
-        return parent::getGlobalSearchEloquentQuery()->whereNot('rule', 1);
-    }
+    // #[Override]
+    // public static function getGlobalSearchEloquentQuery(): Builder
+    // {
+    //     return parent::getGlobalSearchEloquentQuery()->whereNot('rule', 1);
+    // }
 }
