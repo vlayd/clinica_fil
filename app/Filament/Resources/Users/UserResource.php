@@ -23,6 +23,8 @@ class UserResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'fas-user';
 
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static string|UnitEnum|null $navigationGroup = 'Pessoas';
 
     protected static ?string $recordTitleAttribute = 'name';
@@ -62,9 +64,9 @@ class UserResource extends Resource
     {
         return [
             'index' => ListUsers::route('/'),
-            'create' => CreateUser::route('/create'),
-            'view' => ViewUser::route('/{record}'),
-            'edit' => EditUser::route('/{record}/edit'),
+            // 'create' => CreateUser::route('/create'),
+            // 'view' => ViewUser::route('/{record}'),
+            // 'edit' => EditUser::route('/{record}/edit'),
         ];
     }
 }

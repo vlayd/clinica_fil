@@ -2,6 +2,7 @@
 namespace App\Filament\Resources\Employes\Tables;
 
 use App\Filament\Resources\Helpers\TableHelper;
+use App\Models\User;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ForceDeleteBulkAction;
@@ -15,6 +16,13 @@ class EmployesTable
 {
     public static function configure(Table $table): Table
     {
+        dd(Auth::user()->getAllPermissions()->pluck('name')->toArray());
+        // dd(Auth::user()->getRoleNames()->implode(','));
+        // dd(Auth::user()->can('ResetPassword:User'));
+        $user = new User;
+        $action = $user->getActions('EmployesTable');
+        // dd($action);
+
         return $table
             ->modifyQueryUsing(fn(Builder $query) => $query->whereNot('id', Auth::id())->whereNot('type', 0))
             ->columns([
@@ -30,7 +38,7 @@ class EmployesTable
             ->filters([
                 TrashedFilter::make(),
             ])
-            ->recordActions(TableHelper::recordActions())
+            ->recordActions(TableHelper::recordActions($action))
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

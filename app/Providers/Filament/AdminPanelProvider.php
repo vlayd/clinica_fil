@@ -53,7 +53,7 @@ class AdminPanelProvider extends PanelProvider
                 ->label(function(){
 					$roles = Auth::user()->getRoleNames();
 
-					return $roles->isNotEmpty() ? 'Roles: ' . $roles->implode(',') : 'Roles';
+					return $roles->isNotEmpty() ? 'Nível: ' . $roles->implode(',') : 'Roles';
                 })
                 ->url(fn() => route('filament.admin.resources.shield.roles.index'))
                 ->icon(Heroicon::ShieldCheck)
@@ -108,17 +108,16 @@ class AdminPanelProvider extends PanelProvider
         FilamentView::registerRenderHook(
             PanelsRenderHook::USER_MENU_BEFORE,
             fn (): string => Blade::render('
-                <div class="hidden sm:flex flex-col text-right me-3 justify-center">
-                <!-- Nome do usuário ligeiramente menor (text-xs ou text-[13px]) -->
-                <span class="text-xs font-semibold text-gray-800 dark:text-gray-100 leading-tight">
-                    {{ auth()->user()->name }}
-                </span>
-                <br>
-                <!-- Cargo fixo logo abaixo -->
-                <span class="text-[10px] font-medium text-gray-500 dark:text-gray-400 tracking-wide uppercase mt-0.5">
-                    Administrador
-                </span>
-            </div>
+                 <!-- O items-center força tudo dentro a alinhar estritamente pelo meio horizontal -->
+                <div class="flex flex-col items-center justify-center">
+                    <!-- Nome do usuário -->
+                    <span class="text-xs font-semibold text-gray-800 dark:text-gray-100 leading-none truncate">
+                        {{ auth()->user()->name }}
+                    </span><br>
+                    <span class="ms-3 text-[10px] text-center font-medium text-gray-400 dark:text-gray-500 tracking-wide uppercase mt-1">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Administrador
+                    </span>
+                </div>
             '),
         );
     }

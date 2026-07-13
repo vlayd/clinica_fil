@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Hash;
 
 class TableHelper
 {
-    public static function recordActions(array $buttons = ['view', 'edit', 'delete']): array
+    public static function recordActions(array $buttons): array
     {
         $actionView = [];
         $actions = [

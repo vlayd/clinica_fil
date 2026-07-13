@@ -87,4 +87,17 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         // return  Storage::url('storage/images/no-foto2.png');
         return asset('images/no-foto2.png');
     }
+
+    public function getActions(string $type) {
+        $auth =  Auth::user();
+        if($type == 'EmployesTable'){
+            // return Auth::user()->getRoleNames()->implode(',');
+            if($auth->getRoleNames()->implode(',') == 'super_admin') return ['view', 'edit', 'delete'];
+            $action = [];
+            if($auth->can('View:Employe')) $action[] = 'view';
+            if($auth->can('Update:Employe')) $action[] = 'edit';
+            if($auth->can('Delete:Employe')) $action[] = 'delete';
+            return $action;
+        }
+    }
 }

@@ -16,6 +16,8 @@ class PatientsTable
 {
     public static function configure(Table $table): Table
     {
+
+        $actions = ['view', 'edit', 'delete'];
         return $table
             ->modifyQueryUsing(fn(Builder $query) => $query->where('type', 0))
             ->columns([
@@ -29,7 +31,7 @@ class PatientsTable
             ->filters([
                 TrashedFilter::make(),
             ])
-            ->recordActions(TableHelper::recordActions())
+            ->recordActions(TableHelper::recordActions($actions))
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
