@@ -23,7 +23,7 @@ class UserResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'fas-user';
 
-    protected static bool $shouldRegisterNavigation = false;
+    // protected static bool $shouldRegisterNavigation = false;
 
     protected static string|UnitEnum|null $navigationGroup = 'Pessoas';
 

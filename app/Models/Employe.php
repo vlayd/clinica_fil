@@ -12,12 +12,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
-class Employe extends Model
+class Employe extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, SoftDeletes, HasRoles;
 
-    protected $table = 'user';
+    protected $table = 'users';
 
     protected $fillable = [
                             'name',

@@ -3,40 +3,35 @@
 namespace App\Policies;
 
 use Illuminate\Foundation\Auth\User as AuthUser;
-use Spatie\Permission\Models\Role;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class UserPolicy
+class EmployePolicy
 {
     use HandlesAuthorization;
-
-    public function resetPassword(AuthUser $authUser): bool
+    
+    public function viewAny(AuthUser $authUser): bool
     {
-        return $authUser->can('ResetPassword:User');
+        return $authUser->can('ViewAny:Employe');
     }
 
-     public function viewAny(AuthUser $authUser): bool
+    public function view(AuthUser $authUser): bool
     {
-        return $authUser->can('ViewAny:Role');
-    }
-
-    public function view(AuthUser $authUser, Role $role): bool
-    {
-        return $authUser->can('View:Role');
+        return $authUser->can('View:Employe');
     }
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('Create:Role');
+        return $authUser->can('Create:Employe');
     }
 
-    public function update(AuthUser $authUser, Role $role): bool
+    public function update(AuthUser $authUser): bool
     {
-        return $authUser->can('Update:Role');
+        return $authUser->can('Update:Employe');
     }
 
-    public function delete(AuthUser $authUser, Role $role): bool
+    public function delete(AuthUser $authUser): bool
     {
-        return $authUser->can('Delete:Role');
+        return $authUser->can('Delete:Employe');
     }
+
 }

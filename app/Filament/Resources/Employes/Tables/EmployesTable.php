@@ -16,11 +16,12 @@ class EmployesTable
 {
     public static function configure(Table $table): Table
     {
-        dd(Auth::user()->getAllPermissions()->pluck('name')->toArray());
+        // dd(Auth::user()->getAllPermissions()->pluck('name')->toArray());
         // dd(Auth::user()->getRoleNames()->implode(','));
         // dd(Auth::user()->can('ResetPassword:User'));
-        $user = new User;
-        $action = $user->getActions('EmployesTable');
+        // dd('teste');
+        // $user = new User;
+        // $action = $user->getActions('EmployesTable');
         // dd($action);
 
         return $table
@@ -38,7 +39,7 @@ class EmployesTable
             ->filters([
                 TrashedFilter::make(),
             ])
-            ->recordActions(TableHelper::recordActions($action))
+            ->recordActions(TableHelper::recordActions())
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

@@ -4,7 +4,6 @@ namespace App\Filament\Resources\Helpers;
 
 use Carbon\Carbon;
 use Filament\Actions\Action;
-use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\RestoreAction;
@@ -15,11 +14,13 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class TableHelper
 {
-    public static function recordActions(array $buttons): array
+    public static function recordActions(array $buttons = ['view', 'edit', 'delete']): array
     {
+        // dd(Auth::user()->can('ResetPassword:User'));
         $actionView = [];
         $actions = [
             'view' => ViewAction::make()->label('')->iconButton()->color('primary'),
@@ -63,9 +64,12 @@ class TableHelper
                         ->send();
                 }),
         ];
+        //Se o usuário corrente não tiver a permissão para resetar senha
+        if(!Auth::user()->can('ResetPassword:User')) unset($actions["resetPassword"]);
         foreach ($buttons as $button) {
             $actionView[] = $actions[$button];
         }
+        // dd($actionView);
         return $actionView;
     }
 
