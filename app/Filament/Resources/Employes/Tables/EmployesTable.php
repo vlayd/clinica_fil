@@ -30,7 +30,8 @@ class EmployesTable
                 TableHelper::columnImage(),
                 TableHelper::columnName(),
                 TableHelper::columnEmail(),
-                TableHelper::columnActiveToggle(),
+                TableHelper::columnActiveToggle()
+                    ->visible(Auth::user()->can('IsUser:Employe')),
                 TableHelper::columnCpf()->toggleable(isToggledHiddenByDefault: true),
                 TableHelper::columnBirth()->toggleable(isToggledHiddenByDefault: true),
                 // TableHelper::columnBirthDiffDays()->toggleable(isToggledHiddenByDefault: true),

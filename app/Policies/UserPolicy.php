@@ -9,6 +9,11 @@ class UserPolicy
 {
     use HandlesAuthorization;
     
+    public function viewAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('ViewAny:User');
+    }
+
     public function resetPassword(AuthUser $authUser): bool
     {
         return $authUser->can('ResetPassword:User');

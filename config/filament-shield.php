@@ -35,7 +35,7 @@ return [
             'pages' => true,
             'widgets' => true,
             'resources' => true,
-            'custom_permissions' => true,
+            'custom_permissions' => false,
         ],
     ],
 
@@ -198,6 +198,7 @@ return [
             ],
 
             UserResource::class => [
+                'viewAny',
                 'resetPassword',
             ],
 
@@ -207,6 +208,7 @@ return [
                 'create',
                 'update',
                 'delete',
+                'isUser',
             ],
 
             PatientResource::class => [
@@ -215,6 +217,7 @@ return [
                 'create',
                 'update',
                 'delete',
+                'isUser',
             ],
         ],
         'exclude' => [

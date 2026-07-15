@@ -15,6 +15,9 @@ class UsersTable
 {
     public static function configure(Table $table): Table
     {
+        $action = ["resetPassword"];        
+        //Se o usuário corrente não tiver a permissão para resetar senha
+        if(!Auth::user()->can('ResetPassword:User')) $action = [];
         return $table
             ->modifyQueryUsing(fn(Builder $query) => $query->whereNot('id', Auth::id())->whereNot('active', 0))
             ->columns([

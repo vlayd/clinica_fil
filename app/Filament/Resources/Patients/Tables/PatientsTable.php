@@ -11,12 +11,13 @@ use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class PatientsTable
 {
     public static function configure(Table $table): Table
     {
-
+        // dd(Auth::user()->can('IsUser:Patient'));
         $actions = ['view', 'edit', 'delete'];
         return $table
             ->modifyQueryUsing(fn(Builder $query) => $query->where('type', 0))
@@ -24,7 +25,7 @@ class PatientsTable
                 TableHelper::columnImage(),
                 TableHelper::columnName(),
                 TableHelper::columnEmail(),
-                TableHelper::columnActiveToggle(),
+                TableHelper::columnActiveToggle(permission: Auth::user()->can('IsUser:Patient')),
                 TableHelper::columnCpf()->toggleable(isToggledHiddenByDefault: true),
                 TableHelper::columnBirth()->toggleable(isToggledHiddenByDefault: true),
             ])

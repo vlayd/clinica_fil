@@ -5,38 +5,38 @@ namespace App\Policies;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class EmployePolicy
+class PatientPolicy
 {
     use HandlesAuthorization;
     
     public function viewAny(AuthUser $authUser): bool
     {
-        return $authUser->can('ViewAny:Employe');
+        return $authUser->can('ViewAny:Patient');
     }
 
     public function view(AuthUser $authUser): bool
     {
-        return $authUser->can('View:Employe');
+        return $authUser->can('View:Patient');
     }
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('Create:Employe');
+        return $authUser->can('Create:Patient');
     }
 
     public function update(AuthUser $authUser): bool
     {
-        return $authUser->can('Update:Employe');
+        return $authUser->can('Update:Patient');
     }
 
     public function delete(AuthUser $authUser): bool
     {
-        return $authUser->can('Delete:Employe');
+        return $authUser->can('Delete:Patient');
     }
 
     public function isUser(AuthUser $authUser): bool
     {
-        return $authUser->can('IsUser:Employe');
+        return $authUser->can('IsUser:Patient');
     }
 
 }

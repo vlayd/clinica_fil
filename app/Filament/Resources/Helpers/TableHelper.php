@@ -20,7 +20,6 @@ class TableHelper
 {
     public static function recordActions(array $buttons = ['view', 'edit', 'delete']): array
     {
-        // dd(Auth::user()->can('ResetPassword:User'));
         $actionView = [];
         $actions = [
             'view' => ViewAction::make()->label('')->iconButton()->color('primary'),
@@ -41,6 +40,7 @@ class TableHelper
                 ->modalSubmitActionLabel('Redefinir')
                 ->modalIcon('fas-key')
                 ->modalIconColor('warning')
+                ->visible(Auth::user()->can('ResetPassword:User'))
                 ->action(function ($record) {
                     // Remove caracteres especiais (pontos e traços) do CPF
                     $cpfLimpo = preg_replace('/[^0-9]/', '', $record->cpf);
@@ -64,8 +64,7 @@ class TableHelper
                         ->send();
                 }),
         ];
-        //Se o usuário corrente não tiver a permissão para resetar senha
-        if(!Auth::user()->can('ResetPassword:User')) unset($actions["resetPassword"]);
+
         foreach ($buttons as $button) {
             $actionView[] = $actions[$button];
         }
@@ -213,10 +212,11 @@ class TableHelper
             });
     }
 
-    public static function columnActiveToggle($make = 'active')
+    public static function columnActiveToggle($make = 'active', $permission = true)
     {
         return ToggleColumn::make($make)
             ->label('Usuário')
+            // ->visible($permission)
             ->alignCenter();
     }
 

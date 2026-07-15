@@ -22,7 +22,7 @@ use UnitEnum;
 
 class PatientResource extends Resource
 {
-    protected static ?string $model = User::class;
+    protected static ?string $model = Patient::class;
 
     protected static string|BackedEnum|null $navigationIcon = 'fas-address-book';
 

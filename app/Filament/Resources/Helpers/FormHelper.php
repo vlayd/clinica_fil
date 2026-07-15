@@ -17,8 +17,9 @@ class FormHelper
     {
         return FileUpload::make('photo')
             ->imagePreviewHeight('350')
+            // ->default('storage/images/no-foto2.png')
             ->disk('public')
-            ->directory('users/photos')
+            ->directory('images/users')
             ->image()
             ->extraAttributes(['class' => 'w-1/6 mx-auto'])
             ->label('Foto');
