@@ -25,7 +25,7 @@ class PatientsTable
                 TableHelper::columnImage(),
                 TableHelper::columnName(),
                 TableHelper::columnEmail(),
-                TableHelper::columnActiveToggle(permission: Auth::user()->can('IsUser:Patient')),
+                TableHelper::columnActiveToggle()->visible(Auth::user()->can('IsUser:Patient')),
                 TableHelper::columnCpf()->toggleable(isToggledHiddenByDefault: true),
                 TableHelper::columnBirth()->toggleable(isToggledHiddenByDefault: true),
             ])
@@ -34,11 +34,11 @@ class PatientsTable
             ])
             ->recordActions(TableHelper::recordActions($actions))
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                    ForceDeleteBulkAction::make(),
-                    RestoreBulkAction::make(),
-                ]),
+                // BulkActionGroup::make([
+                //     DeleteBulkAction::make(),
+                //     ForceDeleteBulkAction::make(),
+                //     RestoreBulkAction::make(),
+                // ]),
             ]);
     }
 }

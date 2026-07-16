@@ -3,8 +3,10 @@
 namespace App\Filament\Resources\Users\Tables;
 
 use App\Filament\Resources\Helpers\TableHelper;
+use App\Models\User;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\RecordActionsPosition;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,22 +17,19 @@ class UsersTable
 {
     public static function configure(Table $table): Table
     {
-        $action = ["resetPassword"];        
-        //Se o usuário corrente não tiver a permissão para resetar senha
-        if(!Auth::user()->can('ResetPassword:User')) $action = [];
         return $table
             ->modifyQueryUsing(fn(Builder $query) => $query->whereNot('id', Auth::id())->whereNot('active', 0))
             ->columns([
                 TableHelper::columnImage(),
                 TableHelper::columnName(),
                 TableHelper::columnEmail(),
+                TableHelper::columnRoleBadge(),
                 TableHelper::columnLastLoginAt(),
             ])
             ->filters([
                 //
             ])
-            ->recordActions(
-                TableHelper::recordActions(['resetPassword']))
+            ->recordActions(TableHelper::recordActions(['resetPassword']))
             ->toolbarActions([
                 // BulkActionGroup::make([
                 //     DeleteBulkAction::make(),
