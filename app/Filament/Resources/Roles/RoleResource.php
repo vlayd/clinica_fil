@@ -15,9 +15,22 @@ use BezhanSalleh\FilamentShield\Resources\Roles\RoleResource as RolesRoleResourc
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Override;
 
 class RoleResource extends RolesRoleResource
 {
+    // Rótulo que aparece no menu lateral
+    protected static ?string $navigationLabel = 'Cargos';
+
+    // Rótulo dentro das páginas (títulos, breadcrumbs)
+    protected static ?string $modelLabel = 'Cargo';
+
+    // Rótulo no plural dentro das páginas
+    protected static ?string $pluralModelLabel = 'Cargos';
+
+
+    protected static ?string $recordTitleAttribute = 'name';
+
     public static function table(Table $table): Table
     {
         return $table

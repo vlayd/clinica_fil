@@ -236,21 +236,9 @@ class TableHelper
     public static function columnRoleBadge($make = 'roles.name')
     {
         return TextColumn::make($make)
-            ->placeholder(fn(User $record) => $record->active )
+            ->placeholder('Não informado')
             ->label('Nível')
-            ->action(
-                Action::make('editNível')
-                    ->modalHeading('Alterar Nível')
-                    ->modalWidth('md')
-                    ->fillForm(fn($record): array => [
-                        $make => $record->{$make},
-                    ])
-                    ->schema([
-                        Select::make('roles')->relationship('roles', 'name')
-                    ])
-            )
             ->alignCenter()
-            ->visible(fn(User $record) => $record->active )
             ->badge()
             ->color('primary');
         // ->formatStateUsing(fn(bool $state): string => $state ? 'Sim' : 'Não');

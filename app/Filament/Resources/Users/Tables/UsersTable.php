@@ -3,15 +3,12 @@
 namespace App\Filament\Resources\Users\Tables;
 
 use App\Filament\Resources\Helpers\TableHelper;
-use App\Models\User;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Enums\RecordActionsPosition;
+use Filament\Actions\Action;
+use Filament\Forms\Components\Select;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
+// dd(Auth::id());
 
 class UsersTable
 {
@@ -23,7 +20,19 @@ class UsersTable
                 TableHelper::columnImage(),
                 TableHelper::columnName(),
                 TableHelper::columnEmail(),
-                TableHelper::columnRoleBadge(),
+                TableHelper::columnRoleBadge()
+                    ->action(
+                        Action::make('editNível')
+                            ->modalHeading('Alterar Nível')
+                            ->modalWidth('md')
+                            ->fillForm(fn($record): array => [
+                                'roles.name' => $record->{'roles.name'},
+                            ])
+                            ->schema([
+                                Select::make('roles')->relationship('roles', 'name')
+                            ])
+                    )
+                    ->hidden(fn($livewire) => $livewire->activeTab == 'clientes'),
                 TableHelper::columnLastLoginAt(),
             ])
             ->filters([
