@@ -8,6 +8,9 @@ use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
+use Override;
 
 class EditEmploye extends EditRecord
 {
@@ -21,5 +24,11 @@ class EditEmploye extends EditRecord
             ForceDeleteAction::make(),
             RestoreAction::make(),
         ];
+    }
+
+    #[Override]
+    protected function resolveRecord(int|string $key): Model
+    {
+        return parent::resolveRecord(Crypt::decryptString($key));
     }
 }

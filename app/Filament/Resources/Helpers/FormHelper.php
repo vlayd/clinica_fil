@@ -8,6 +8,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Utilities\Set;
 use App\Enums\BrazilianState;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Components\Fieldset;
 use Illuminate\Support\Facades\Validator;
 
@@ -125,5 +126,22 @@ class FormHelper
                 'email' => 'E-mail inválido.',
                 'unique' => 'Este e-mail já está em uso.',
             ]);
+    }
+
+    public static function inputName()
+    {
+        return TextInput::make('name')
+            ->string()
+            ->required()
+            ->label('Nome')
+            ->validationMessages([
+                'required' => 'O nome é obrigatório.',
+            ]);
+    }
+
+    public static function inputDescription()
+    {
+        return Textarea::make('description')
+            ->label('Descrição');
     }
 }

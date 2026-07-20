@@ -20,26 +20,27 @@ class Patient extends Authenticatable
     protected $table = 'users';
 
     protected $fillable = [
-                            'name',
-                            'email',
-                            'email_verified_at',
-                            'password',
-                            'rule',
-                            'active',
-                            'photo',
-                            'cpf',
-                            'birth',
-                            'rg',
-                            'phone',
-                            'cellphone',
-                            'street',
-                            'number',
-                            'complement',
-                            'neighborhood',
-                            'city',
-                            'state',
-                            'last_login_at',
-                            'zip_code'];
+        'name',
+        'email',
+        'email_verified_at',
+        'password',
+        'rule',
+        'active',
+        'photo',
+        'cpf',
+        'birth',
+        'rg',
+        'phone',
+        'cellphone',
+        'street',
+        'number',
+        'complement',
+        'neighborhood',
+        'city',
+        'state',
+        'last_login_at',
+        'zip_code'
+    ];
 
 
     /**
@@ -53,5 +54,10 @@ class Patient extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function convenios()
+    {
+        return $this->belongsToMany(Agreement::class);
     }
 }
