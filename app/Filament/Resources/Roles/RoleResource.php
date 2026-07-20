@@ -2,24 +2,73 @@
 
 namespace App\Filament\Resources\Roles;
 
-use App\Filament\Resources\Roles\Pages\CreateRole;
-use App\Filament\Resources\Roles\Pages\EditRole;
+use App\Filament\Resources\Helpers\TableHelper;
 use App\Filament\Resources\Roles\Pages\ListRoles;
-use App\Filament\Resources\Roles\Schemas\RoleForm;
-use App\Filament\Resources\Roles\Tables\RolesTable;
-use App\Models\Role;
-use BackedEnum;
+use BezhanSalleh\FilamentShield\Resources\Roles\Pages\CreateRole;
+use BezhanSalleh\FilamentShield\Resources\Roles\Pages\EditRole;
+// use BezhanSalleh\FilamentShield\Resources\Roles\Pages\ListRoles;
+use BezhanSalleh\FilamentShield\Resources\Roles\Pages\ViewRole;
+use BezhanSalleh\FilamentShield\Support\Utils;
+use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder;
 use BezhanSalleh\FilamentShield\Resources\Roles\RoleResource as RolesRoleResource;
-use Filament\Resources\Resource;
-use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
+use Filament\Support\Enums\FontWeight;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Override;
+use UnitEnum;
 
 class RoleResource extends RolesRoleResource
 {
+
+// app/Filament/Resources/RoleResource.php
+
+
+
+// protected static ?string $navigationGroup = 'Configurações'; // Nome do grupo no menu lateral
+
+// protected static ?string $modelLabel = 'Função'; // Label singular do modelo
+
+// protected static ?string $pluralModelLabel = 'Funções'; // Label plural do modelo
+
+// protected static string|UnitEnum|null $navigationGroup = 'Pessoas';
+
     public static function table(Table $table): Table
     {
-        return RolesTable::configure($table);
+        return $table
+            ->modifyQueryUsing(fn(Builder $query) => $query->whereNot('name', 'super_admin'))
+            ->columns([
+                TextColumn::make('name')
+                    ->weight(FontWeight::Medium)
+                    ->label(__('filament-shield::filament-shield.column.name'))
+                    ->formatStateUsing(fn (string $state): string => Str::headline($state))
+                    ->searchable(),
+                TextColumn::make('guard_name')
+                    ->badge()
+                    ->color('warning')
+                    ->label(__('filament-shield::filament-shield.column.guard_name')),
+                TextColumn::make('team.name')
+                    ->default('Global')
+                    ->badge()
+                    ->color(fn (mixed $state): string => str($state)->contains('Global') ? 'gray' : 'primary')
+                    ->label(__('filament-shield::filament-shield.column.team'))
+                    ->searchable()
+                    ->alignCenter()
+                    ->visible(fn (): bool => static::shield()->isCentralApp() && Utils::isTenancyEnabled()),
+                TextColumn::make('permissions_count')
+                    ->badge()
+                    ->label(__('filament-shield::filament-shield.column.permissions'))
+                    ->counts('permissions')
+                    ->alignCenter()
+                    ->color('primary'),
+                TableHelper::columnUpdatedAt(),
+            ])
+            ->filters([
+                //
+            ])
+            ->recordActions(TableHelper::recordActions())
+            ->toolbarActions([
+            ]);
     }
 
     public static function getPages(): array
@@ -28,6 +77,7 @@ class RoleResource extends RolesRoleResource
             'index' => ListRoles::route('/'),
             'create' => CreateRole::route('/create'),
             'edit' => EditRole::route('/{record}/edit'),
+            'view' => ViewRole::route('/{record}'),
         ];
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Resources\Employes\EmployeResource;
-use App\Filament\Resources\Users\UserResource;
 use Filament\Enums\GlobalSearchPosition;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Actions\Action;
@@ -104,18 +103,14 @@ class AdminPanelProvider extends PanelProvider
 
     public function boot(): void
     {
-        // Renderiza o nome do usuário ao lado esquerdo da foto na barra do topo
         FilamentView::registerRenderHook(
             PanelsRenderHook::USER_MENU_BEFORE,
             fn (): string => Blade::render('
                  <!-- O items-center força tudo dentro a alinhar estritamente pelo meio horizontal -->
-                <div class="flex flex-col items-center justify-center">
+                <div class="">
                     <!-- Nome do usuário -->
                     <span class="text-xs font-semibold text-gray-800 dark:text-gray-100 leading-none truncate">
-                        {{ auth()->user()->name }}
-                    </span><br>
-                    <span class="ms-3 text-[10px] text-center font-medium text-gray-400 dark:text-gray-500 tracking-wide uppercase mt-1">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Administrador
+                        {{ auth()->user()->name }}<br>
                     </span>
                 </div>
             '),

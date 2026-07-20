@@ -2,17 +2,20 @@
 
 namespace App\Filament\Resources\Helpers;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Notifications\Notification;
+use Filament\Tables\Columns\SelectColumn;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
@@ -74,7 +77,8 @@ class TableHelper
 
     public static function columnImage($make = 'photo')
     {
-        return ImageColumn::make($make)->defaultImageUrl(url('storage/images/no-foto2.png'))
+        return ImageColumn::make($make)
+            ->defaultImageUrl(url('storage/images/no-foto2.png'))
             ->disk('public')
             ->label('')
             ->circular()
@@ -147,9 +151,9 @@ class TableHelper
     public static function columnUpdatedAt($make = 'updated_at')
     {
         return TextColumn::make($make)
-            ->label('Data de atualização')
+            ->label('Última atualização')
             ->alignCenter()
-            ->isoDate('L');
+            ->isoDate('LLL');
     }
 
     public static function columnBirth($make = 'birth')
@@ -225,8 +229,20 @@ class TableHelper
         return TextColumn::make($make)
             ->label('Ativo')
             ->alignCenter()
+            ->badge()
             ->color(fn(bool $state): string => $state ? 'success' : 'danger')
             ->formatStateUsing(fn(bool $state): string => $state ? 'Sim' : 'Não');
+    }
+
+    public static function columnRoleBadge($make = 'roles.name')
+    {
+        return TextColumn::make($make)
+            ->placeholder('Não informado')
+            ->label('Nível')
+            ->alignCenter()
+            ->badge()
+            ->color('primary');
+        // ->formatStateUsing(fn(bool $state): string => $state ? 'Sim' : 'Não');
     }
 
     private static function diffInDays(string $state)

@@ -79,6 +79,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
      public function getFilamentAvatarUrl(): ?string
     {
         // Altere 'avatar_url' para o nome da coluna que você usa no banco
+        // dd(Storage::url($this->photo));
         if (!empty($this->photo)) {
             return  Storage::url($this->photo);
         }
