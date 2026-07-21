@@ -56,7 +56,7 @@ class Patient extends Authenticatable
         ];
     }
 
-    public function convenios()
+    public function agreements()
     {
         return $this->belongsToMany(Agreement::class);
     }

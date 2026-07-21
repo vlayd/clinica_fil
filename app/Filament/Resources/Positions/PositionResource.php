@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\Agreements;
-use App\Filament\Resources\Agreements\Pages\ListAgreements;
-use App\Filament\Resources\Agreements\Pages\ViewAgreement;
-use App\Filament\Resources\Agreements\Schemas\AgreementForm;
-use App\Filament\Resources\Agreements\Schemas\AgreementInfolist;
-use App\Filament\Resources\Agreements\Tables\AgreementsTable;
-use App\Models\Agreement;
+namespace App\Filament\Resources\Positions;
+
+use App\Filament\Resources\Positions\Pages\CreatePosition;
+use App\Filament\Resources\Positions\Pages\EditPosition;
+use App\Filament\Resources\Positions\Pages\ListPositions;
+use App\Filament\Resources\Positions\Pages\ViewPosition;
+use App\Filament\Resources\Positions\Schemas\PositionForm;
+use App\Filament\Resources\Positions\Schemas\PositionInfolist;
+use App\Filament\Resources\Positions\Tables\PositionsTable;
+use App\Models\Position;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -16,11 +19,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use UnitEnum;
 
-class AgreementResource extends Resource
+class PositionResource extends Resource
 {
-    protected static ?string $model = Agreement::class;
+    protected static ?string $model = Position::class;
 
-    protected static string|BackedEnum|null $navigationIcon = 'fas-id-card';
+    protected static string|BackedEnum|null $navigationIcon = 'fas-user-tie';
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -30,22 +33,22 @@ class AgreementResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Convênios';
+        return 'Cargos';
     }
 
     public static function form(Schema $schema): Schema
     {
-        return AgreementForm::configure($schema);
+        return PositionForm::configure($schema);
     }
 
     public static function infolist(Schema $schema): Schema
     {
-        return AgreementInfolist::configure($schema);
+        return PositionInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table
     {
-        return AgreementsTable::configure($table);
+        return PositionsTable::configure($table);
     }
 
     public static function getRelations(): array
@@ -58,10 +61,10 @@ class AgreementResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListAgreements::route('/'),
-            // 'create' => CreateAgreement::route('/create'),
-            'view' => ViewAgreement::route('/{record}'),
-            // 'edit' => EditAgreement::route('/{record}/edit'),
+            'index' => ListPositions::route('/'),
+            // 'create' => CreatePosition::route('/create'),
+            'view' => ViewPosition::route('/{record}'),
+            // 'edit' => EditPosition::route('/{record}/edit'),
         ];
     }
 

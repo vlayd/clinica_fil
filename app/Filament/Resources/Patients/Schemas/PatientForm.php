@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Patients\Schemas;
 use App\Enums\UserStatus;
 use App\Filament\Resources\Helpers\FormHelper;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Schemas\Components\Group;
@@ -44,6 +45,13 @@ class PatientForm
                             FormHelper::inputEmail(),
                             ToggleButtons::make('active')->label('Usuário')->default(UserStatus::Não)->inline()
                                 ->options(UserStatus::class),
+                        ])->columns(2),
+                    ]),
+                Section::make('Informações Importantes')
+                    ->schema([
+                        Group::make([
+                            Select::make('agreements')
+                            ->relationship('agreements', 'name')->multiple()->preload(),
                         ])->columns(2),
                     ]),
                 Hidden::make('password')

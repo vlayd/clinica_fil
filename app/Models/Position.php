@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
 
-class Agreement extends Model
+use Illuminate\Database\Eloquent\Model;
+
+class Position extends Model
 {
     use SoftDeletes, HasRoles;
 
@@ -15,8 +16,8 @@ class Agreement extends Model
         'description',
     ];
 
-    public function patients()
+    public function employes()
     {
-        return $this->belongsToMany(Patient::class);
+        return $this->belongsToMany(Employe::class);
     }
 }

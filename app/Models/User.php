@@ -101,4 +101,11 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
     //         return $action;
     //     }
     // }
+
+
+
+    public function agreements()
+    {
+        return $this->belongsToMany(Agreement::class);
+    }
 }

@@ -66,4 +66,9 @@ class Employe extends Authenticatable
         // return encrypt($this->id);
         return Crypt::encryptString($this->id);
     }
+
+    public function positions()
+    {
+        return $this->belongsToMany(Position::class);
+    }
 }

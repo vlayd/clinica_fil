@@ -9,7 +9,6 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\ViewAction;
-use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -92,6 +91,15 @@ class TableHelper
             ->label('Nome')
             ->searchable()
             // ->toggleable(isToggledHiddenByDefault: false)
+            ->sortable();
+    }
+
+    public static function columnDescription($make = 'description')
+    {
+        return TextColumn::make($make)
+            ->label('Descrição')
+            ->searchable()
+            // ->limit(50)
             ->sortable();
     }
 
@@ -216,7 +224,7 @@ class TableHelper
             });
     }
 
-    public static function columnActiveToggle($make = 'active', $permission = true)
+    public static function columnActiveToggle($make = 'active')
     {
         return ToggleColumn::make($make)
             ->label('Usuário')
@@ -232,6 +240,16 @@ class TableHelper
             ->badge()
             ->color(fn(bool $state): string => $state ? 'success' : 'danger')
             ->formatStateUsing(fn(bool $state): string => $state ? 'Sim' : 'Não');
+    }
+
+    public static function columnTextBadge(string $make, string $label, string $color = 'success')
+    {
+        return TextColumn::make($make)
+            ->placeholder('Não Informado')
+            ->label($label)
+            ->alignCenter()
+            ->badge()
+            ->color($color);
     }
 
     public static function columnRoleBadge($make = 'roles.name')

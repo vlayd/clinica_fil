@@ -30,6 +30,7 @@ class EmployesTable
                 TableHelper::columnImage(),
                 TableHelper::columnName(),
                 TableHelper::columnEmail(),
+                TableHelper::columnTextBadge('positions.name', 'Cargo'),
                 TableHelper::columnActiveToggle()
                     ->visible(Auth::user()->can('IsUser:Employe')),
                 TableHelper::columnCpf()->toggleable(isToggledHiddenByDefault: true),
@@ -42,11 +43,11 @@ class EmployesTable
             ])
             ->recordActions(TableHelper::recordActions())
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                    ForceDeleteBulkAction::make(),
-                    RestoreBulkAction::make(),
-                ]),
+                // BulkActionGroup::make([
+                //     DeleteBulkAction::make(),
+                //     ForceDeleteBulkAction::make(),
+                //     RestoreBulkAction::make(),
+                // ]),
             ]);
     }
 }

@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Filament\Resources\Agreements\Tables;
+namespace App\Filament\Resources\Positions\Tables;
 
 use App\Filament\Resources\Helpers\TableHelper;
-use Filament\Forms\Components\Select;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
-class AgreementsTable
+class PositionsTable
 {
     public static function configure(Table $table): Table
     {
