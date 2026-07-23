@@ -85,11 +85,11 @@ class TableHelper
             ->width('50px');
     }
 
-    public static function columnName($make = 'name')
+    public static function columnName($make = 'name', $searchable = true)
     {
         return TextColumn::make($make)
             ->label('Nome')
-            ->searchable()
+            ->searchable($searchable)
             // ->toggleable(isToggledHiddenByDefault: false)
             ->sortable();
     }

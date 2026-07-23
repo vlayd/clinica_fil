@@ -15,7 +15,7 @@ class UsersTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn(Builder $query) => $query->whereNot('id', Auth::id())->whereNot('active', 0))
+            ->modifyQueryUsing(fn(Builder $query) => $query->whereNot('id', Auth::id())->where('enterprise_id', auth()->user()->enterprise_id)->whereNot('active', 0))
             ->columns([
                 TableHelper::columnImage(),
                 TableHelper::columnName(),

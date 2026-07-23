@@ -2,11 +2,6 @@
 namespace App\Filament\Resources\Employes\Tables;
 
 use App\Filament\Resources\Helpers\TableHelper;
-use App\Models\User;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\ForceDeleteBulkAction;
-use Filament\Actions\RestoreBulkAction;
 use Filament\Tables\Filters\TrashedFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Table;
@@ -22,15 +17,16 @@ class EmployesTable
         // dd('teste');
         // $user = new User;
         // $action = $user->getActions('EmployesTable');
-        // dd($action);
+        // dd(auth()->user()->enterprise_id);
 
         return $table
-            ->modifyQueryUsing(fn(Builder $query) => $query->whereNot('id', Auth::id())->whereNot('type', 0))
+            ->modifyQueryUsing(fn(Builder $query) => $query->where('enterprise_id', auth()->user()->enterprise_id)->whereNot('id', Auth::id())->whereNot('type', 0))
             ->columns([
                 TableHelper::columnImage(),
                 TableHelper::columnName(),
                 TableHelper::columnEmail(),
                 TableHelper::columnTextBadge('positions.name', 'Cargo'),
+                TableHelper::columnTextBadge('enterprises.name', 'Tempo'),
                 TableHelper::columnActiveToggle()
                     ->visible(Auth::user()->can('IsUser:Employe')),
                 TableHelper::columnCpf()->toggleable(isToggledHiddenByDefault: true),

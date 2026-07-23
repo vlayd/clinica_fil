@@ -20,7 +20,7 @@ class PatientsTable
         // dd(Auth::user()->can('IsUser:Patient'));
         $actions = ['view', 'edit', 'delete'];
         return $table
-            ->modifyQueryUsing(fn(Builder $query) => $query->where('type', 0))
+            ->modifyQueryUsing(fn(Builder $query) => $query->whereJsonContains('enterprise_id', auth()->user()->enterprise_id)->where('type', 0))
             ->columns([
                 TableHelper::columnImage(),
                 TableHelper::columnName(),
