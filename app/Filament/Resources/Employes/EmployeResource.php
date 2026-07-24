@@ -32,7 +32,7 @@ class EmployeResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-   protected static string|UnitEnum|null $navigationGroup = 'Pessoas';
+    protected static string|UnitEnum|null $navigationGroup = 'Pessoas';
 
     protected static ?int $navigationSort = 2;
 
@@ -102,7 +102,7 @@ class EmployeResource extends Resource
         /** @var Users $record */
         $details = [];
 
-        if($record->email) {
+        if ($record->email) {
             $details['email'] = $record->email;
         }
 

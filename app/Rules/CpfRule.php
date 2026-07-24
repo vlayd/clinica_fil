@@ -31,19 +31,6 @@ class CpfRule implements ValidationRule
             return;
         }
 
-        $query = DB::table('users') // altere 'users' para o nome da sua tabela
-            ->where('cpf', $value);
-
-        // 3. Se for uma edição, ignora o registro atual
-        // if ($this->ignoreId) {
-        //     $query->where('id', '!=', $this->ignoreId);
-        // }
-
-        // 4. Se encontrar algum registro, dispara o erro, mas ignora se o atributo for 'data.cpf' (ou seja, se for o campo de CPF do formulário)
-        if ($query->exists() && $attribute !== 'data.cpf') {
-            $fail('Este CPF já está cadastrado em nosso sistema.');
-        }
-
         for ($t = 9; $t < 11; $t++) {
             $sum = 0;
 
@@ -57,6 +44,19 @@ class CpfRule implements ValidationRule
                 $fail($message);
                 return;
             }
+        }
+
+        $query = DB::table('users') // altere 'users' para o nome da sua tabela
+            ->where('cpf', $value);
+
+        // 3. Se for uma edição, ignora o registro atual
+        // if ($this->ignoreId) {
+        //     $query->where('id', '!=', $this->ignoreId);
+        // }
+
+        // 4. Se encontrar algum registro, dispara o erro, mas ignora se o atributo for 'data.cpf' (ou seja, se for o campo de CPF do formulário)
+        if ($query->exists() && $attribute !== 'data.cpf') {
+            $fail('Este CPF já está cadastrado em nosso sistema.');
         }
     }
 }

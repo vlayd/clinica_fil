@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Helpers;
 
 use App\Rules\CpfRule;
+use App\Rules\CnpjRule;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Utilities\Set;
@@ -59,6 +60,43 @@ class FormHelper
                 'unique' => 'Este CPF já está cadastrado em nosso sistema.',
             ])
             ->disabledOn('edit')
+            ->dehydrated(false)
+            ->rule([new CpfRule]);
+    }
+
+    public static function inputCnpj()
+    {
+        return TextInput::make('cnpj')
+            ->required()
+            ->label('CNPJ')->mask('99.999.999/9999-99')
+            ->live(debounce: 500)
+            ->unique(ignoreRecord: true) // Adiciona a validação ao enviar o formulário, garantindo que o CNPJ seja único no banco de dados
+            ->afterStateUpdated(function (?string $state, TextInput $component) {
+                if (blank($state)) {
+                    return;
+                }
+                // Remove caracteres não numéricos do CNPJ
+                $cnpj = preg_replace('/[^0-9]/', '', (string) $state);
+                if (strlen($cnpj) === 14) {
+                    // Remove erros anteriores caso o usuário corrija o CNPJ depois de errar ou dispara outro erro
+                    $component->getLivewire()->resetErrorBag($component->getStatePath());
+                    // Cria um validador manual do Laravel aplicando a sua Rule personalizada
+                    $validator = Validator::make(
+                        ['cnpj' => $state],
+                        ['cnpj' => [new CnpjRule()]],
+                    );
+
+                    if ($validator->fails()) {
+                        // Dispara o erro da Rule personalizada
+                        $component->getLivewire()->addError($component->getStatePath(), $validator->errors()->first('cnpj'));
+                        return;
+                    }
+                }
+            })
+            ->validationMessages([
+                'unique' => 'Este CPF já está cadastrado em nosso sistema.',
+            ])
+            // ->disabledOn('edit')
             ->dehydrated(false)
             ->rule([new CpfRule]);
     }

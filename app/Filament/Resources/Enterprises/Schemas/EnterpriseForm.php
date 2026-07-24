@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Enterprises\Schemas;
 
+use App\Filament\Resources\Helpers\FormHelper;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
@@ -13,12 +14,10 @@ class EnterpriseForm
             ->components([
                 TextInput::make('name')
                     ->required(),
-                TextInput::make('cnpj'),
+                FormHelper::inputCnpj(),
                 TextInput::make('inscricao_estadual'),
                 TextInput::make('inscricao_municipal'),
-                TextInput::make('email')
-                    ->label('Email address')
-                    ->email(),
+                FormHelper::inputEmail(),
                 TextInput::make('phone')
                     ->tel(),
                 TextInput::make('logo'),

@@ -29,6 +29,11 @@ class EnterpriseResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
+    public static function getModelLabel(): string
+    {
+        return 'Empresa';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return EnterpriseForm::configure($schema);
