@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Validator;
 
 class FormHelper
 {
-    public static function inputImageUpload()
+    public static function inputImageUpload($make = "photo")
     {
-        return FileUpload::make('photo')
+        return FileUpload::make($make)
             ->imagePreviewHeight('350')
             ->default('storage/images/no-foto2.png')
             ->disk('public')
@@ -25,6 +25,19 @@ class FormHelper
             ->image()
             ->extraAttributes(['class' => 'w-1/6 mx-auto'])
             ->label('Foto');
+    }
+    public static function inputImageUploadAvatar(string $make, string $label)
+    {
+        return FileUpload::make($make)
+            ->formatStateUsing(function ($state) {
+                return $state ?: 'images/no-image.jpg';
+            })
+            ->disk('public')
+            ->avatar()
+            ->alignCenter()
+            ->directory('images/enterprises')
+            ->image()
+            ->label($label);
     }
 
     public static function inputCpf()
@@ -71,7 +84,7 @@ class FormHelper
             ->label('CNPJ')->mask('99.999.999/9999-99')
             ->live(debounce: 500)
             ->unique(ignoreRecord: true) // Adiciona a validação ao enviar o formulário, garantindo que o CNPJ seja único no banco de dados
-            ->afterStateUpdated(function (?string $state, TextInput $component) {
+            ->afterStateUpdated(function (?string $state, TextInput $component, $record) {
                 if (blank($state)) {
                     return;
                 }
@@ -83,7 +96,7 @@ class FormHelper
                     // Cria um validador manual do Laravel aplicando a sua Rule personalizada
                     $validator = Validator::make(
                         ['cnpj' => $state],
-                        ['cnpj' => [new CnpjRule()]],
+                        ['cnpj' => [new CnpjRule($record->id)]],
                     );
 
                     if ($validator->fails()) {
@@ -94,11 +107,11 @@ class FormHelper
                 }
             })
             ->validationMessages([
-                'unique' => 'Este CPF já está cadastrado em nosso sistema.',
+                'unique' => 'Este CNPJ já está cadastrado em nosso sistema.',
             ])
             // ->disabledOn('edit')
             ->dehydrated(false)
-            ->rule([new CpfRule]);
+            ->rule([new CnpjRule]);
     }
 
     public static function fieldAddressViaCep()
@@ -181,5 +194,16 @@ class FormHelper
     {
         return Textarea::make('description')
             ->label('Descrição');
+    }
+
+    public static function inputDefault(string $make, string $label)
+    {
+        return TextInput::make($make)
+            ->string()
+            ->required()
+            ->label($label)
+            ->validationMessages([
+                'required' => 'O nome é obrigatório.',
+            ]);
     }
 }

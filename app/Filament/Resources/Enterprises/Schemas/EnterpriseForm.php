@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Enterprises\Schemas;
 
 use App\Filament\Resources\Helpers\FormHelper;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Group;
 use Filament\Schemas\Schema;
 
 class EnterpriseForm
@@ -11,7 +12,13 @@ class EnterpriseForm
     public static function configure(Schema $schema): Schema
     {
         return $schema
+        ->columns(null)
             ->components([
+                Group::make([
+                    FormHelper::inputImageUploadAvatar('logo', 'Logo'),
+                    FormHelper::inputImageUploadAvatar('logo_report', 'Logo para Documentos'),
+                    FormHelper::inputImageUploadAvatar('icon', 'Ícone'),
+                ])->columns(3),
                 TextInput::make('name')
                     ->required(),
                 FormHelper::inputCnpj(),
@@ -20,9 +27,7 @@ class EnterpriseForm
                 FormHelper::inputEmail(),
                 TextInput::make('phone')
                     ->tel(),
-                TextInput::make('logo'),
-                TextInput::make('logo_report'),
-                TextInput::make('icon'),
+
                 TextInput::make('active')
                     ->required()
                     ->numeric()

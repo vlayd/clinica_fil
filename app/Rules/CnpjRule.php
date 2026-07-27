@@ -10,6 +10,13 @@ use Illuminate\Translation\PotentiallyTranslatedString;
 class CnpjRule implements ValidationRule
 {
 
+    protected $id;
+
+    public function __construct($id = null)
+    {
+        $this->id = $id;
+    }
+
     /**
      * Run the validation rule.
      *
@@ -50,13 +57,13 @@ class CnpjRule implements ValidationRule
         }
         $resto = $soma % 11;
 
-        if($cnpj[13] != ($resto < 2 ? 0 : 11 - $resto)) {
+        if ($cnpj[13] != ($resto < 2 ? 0 : 11 - $resto)) {
             $fail($message);
             return;
         }
 
-        $query = DB::table('enterprises') // altere para o nome da sua tabela
-            ->where('cnpj', $value);
+        $query = DB::table('enterprises')->where('cnpj', $value)->first();
+        // dd($this->id);
 
         // 3. Se for uma edição, ignora o registro atual
         // if ($this->ignoreId) {
@@ -64,7 +71,7 @@ class CnpjRule implements ValidationRule
         // }
 
         // 4. Se encontrar algum registro, dispara o erro, mas ignora se o atributo for 'data.cnpj' (ou seja, se for o campo de CNPJ do formulário)
-        if ($query->exists() && $attribute !== 'data.cnpj') {
+        if (($this->id != $query->id) && $attribute !== 'data.cnpj') {
             $fail('Este CNPJ já está cadastrado em nosso sistema.');
         }
     }
