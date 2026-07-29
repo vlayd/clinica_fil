@@ -8,9 +8,15 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Utilities\Set;
 use App\Enums\BrazilianState;
+use App\Enums\Gender;
+use App\Enums\SocialLinkType;
+use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Repeater\TableColumn;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Group;
 use Illuminate\Support\Facades\Validator;
 
 class FormHelper
@@ -21,21 +27,31 @@ class FormHelper
             ->imagePreviewHeight('350')
             ->default('storage/images/no-foto2.png')
             ->disk('public')
-            ->directory('images/users')
+            ->directory('users')
             ->image()
             ->extraAttributes(['class' => 'w-1/6 mx-auto'])
             ->label('Foto');
     }
-    public static function inputImageUploadAvatar(string $make, string $label)
+
+    public static function inputGender($make = "gender")
+    {
+        return Radio::make($make)
+            ->inline()
+            ->label('Gênero')
+            ->options(Gender::class);
+    }
+
+    public static function inputImageUploadDefault(string $make, string $label)
     {
         return FileUpload::make($make)
             ->formatStateUsing(function ($state) {
-                return $state ?: 'images/no-image.jpg';
+                // return $state ?: 'images/no-image.jpg';
+                return $state;
             })
             ->disk('public')
-            ->avatar()
+            // ->avatar()
             ->alignCenter()
-            ->directory('images/enterprises')
+            ->directory('enterprises')
             ->image()
             ->label($label);
     }
@@ -80,7 +96,6 @@ class FormHelper
     public static function inputCnpj()
     {
         return TextInput::make('cnpj')
-            ->required()
             ->label('CNPJ')->mask('99.999.999/9999-99')
             ->live(debounce: 500)
             ->unique(ignoreRecord: true) // Adiciona a validação ao enviar o formulário, garantindo que o CNPJ seja único no banco de dados
@@ -166,10 +181,61 @@ class FormHelper
             ])->columns(6);
     }
 
-    public static function inputEmail()
+    public static function inputsAddressViaCep()
+    {
+        return Group::make([
+            TextInput::make('zip_code')
+                ->live(false)
+                ->mask('99999-999')
+                ->afterStateUpdated(function (?string $state, Set $set) {
+                    $cep = preg_replace('/[^0-9]/', '', $state);
+                    $url = "https://viacep.com.br/ws/{$cep}/json/";
+                    if (strlen($cep) === 8) {
+                        $response = file_get_contents($url);
+                        $data = json_decode($response, true);
+
+                        if (isset($data['logradouro'])) {
+                            $set('street', $data['logradouro']);
+                        }
+                        if (isset($data['bairro'])) {
+                            $set('neighborhood', $data['bairro']);
+                        }
+                        if (isset($data['localidade'])) {
+                            $set('city', $data['localidade']);
+                        }
+                        if (isset($data['uf'])) {
+                            $set('state', $data['uf']);
+                        }
+                    }
+                })
+                ->label('CEP')
+                ->columnSpan(1),
+            TextInput::make('street')
+                ->label('Logradouro')
+                ->columnSpan(4),
+            TextInput::make('number')
+                ->label('Número')
+                ->columnSpan(1),
+            TextInput::make('complement')
+                ->label('Complemento')
+                ->columnSpan(3),
+            TextInput::make('neighborhood')
+                ->label('Bairro')
+                ->columnSpan(3),
+            TextInput::make('city')
+                ->label('Cidade')
+                ->columnSpan(4),
+            Select::make('state')
+                ->options(BrazilianState::class)
+                ->label('UF')
+                ->columnSpan(2)
+        ])->columns(6);
+    }
+
+    public static function inputEmail($required = true)
     {
         return TextInput::make('email')
-            ->email()
+            ->email($required)
             ->required()
             ->unique(ignoreRecord: true)
             ->label('E-mail')
@@ -190,6 +256,22 @@ class FormHelper
             ]);
     }
 
+    public static function inputPhone()
+    {
+        return TextInput::make('phone')
+            ->string()
+            ->tel()
+            ->label('Telefone');
+    }
+
+    public static function inputsAddress()
+    {
+        return TextInput::make('phone')
+            ->string()
+            ->tel()
+            ->label('Telefone');
+    }
+
     public static function inputDescription()
     {
         return Textarea::make('description')
@@ -200,10 +282,36 @@ class FormHelper
     {
         return TextInput::make($make)
             ->string()
+            ->label($label)
+            ->validationMessages([
+                'required' => 'O nome é obrigatório.',
+            ]);
+    }
+
+    public static function inputDefaultRequired(string $make, string $label)
+    {
+        return TextInput::make($make)
+            ->string()
             ->required()
             ->label($label)
             ->validationMessages([
                 'required' => 'O nome é obrigatório.',
+            ]);
+    }
+
+    public static function repeatSocialLinks($make = 'social_links')
+    {
+        return Repeater::make($make)
+            ->reorderable(false)
+            ->label('Redes Sociais')
+            ->table([
+                TableColumn::make('type'),
+                TableColumn::make('link'),
+            ])->schema([
+                Select::make('type')
+                    ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                    ->options(SocialLinkType::class),
+                TextInput::make('link')->required()->url()
             ]);
     }
 }

@@ -3,8 +3,8 @@
 namespace App\Filament\Resources\Enterprises\Schemas;
 
 use App\Filament\Resources\Helpers\FormHelper;
-use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class EnterpriseForm
@@ -12,34 +12,28 @@ class EnterpriseForm
     public static function configure(Schema $schema): Schema
     {
         return $schema
-        ->columns(null)
+            ->columns(null)
             ->components([
-                Group::make([
-                    FormHelper::inputImageUploadAvatar('logo', 'Logo'),
-                    FormHelper::inputImageUploadAvatar('logo_report', 'Logo para Documentos'),
-                    FormHelper::inputImageUploadAvatar('icon', 'Ícone'),
-                ])->columns(3),
-                TextInput::make('name')
-                    ->required(),
-                FormHelper::inputCnpj(),
-                TextInput::make('inscricao_estadual'),
-                TextInput::make('inscricao_municipal'),
-                FormHelper::inputEmail(),
-                TextInput::make('phone')
-                    ->tel(),
-
-                TextInput::make('active')
-                    ->required()
-                    ->numeric()
-                    ->default(1),
-                TextInput::make('street'),
-                TextInput::make('number'),
-                TextInput::make('complement'),
-                TextInput::make('neighborhood'),
-                TextInput::make('city'),
-                TextInput::make('state'),
-                TextInput::make('zip_code'),
-                TextInput::make('social_links'),
+                Section::make('Dados da empresa')
+                    ->schema([
+                        Group::make([
+                            FormHelper::inputImageUploadDefault('logo', 'Logo'),
+                            FormHelper::inputImageUploadDefault('logo_report', 'Logo para Documentos'),
+                            FormHelper::inputImageUploadDefault('icon', 'Ícone'),
+                        ])->columns(3),
+                        Group::make([
+                            FormHelper::inputName(),
+                            FormHelper::inputEmail(required: false),
+                            FormHelper::inputPhone(),
+                        ])->columns(3),
+                        Group::make([
+                            FormHelper::inputCnpj(),
+                            FormHelper::inputDefault('inscricao_estadual', 'Inscrição Estadual'),
+                            FormHelper::inputDefault('inscricao_municipal', 'Inscrição Municipal'),
+                        ])->columns(3),
+                        FormHelper::inputsAddressViaCep(),
+                        FormHelper::repeatSocialLinks(),
+                    ]),
             ]);
     }
 }
