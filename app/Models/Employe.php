@@ -26,6 +26,7 @@ class Employe extends Authenticatable
 
     protected $fillable = [
         'name',
+        'gender',
         'email',
         'email_verified_at',
         'password',
@@ -64,7 +65,7 @@ class Employe extends Authenticatable
 
     public function getRouteKey(): string
     {
-        // return encrypt($this->id);
+        // dd(Crypt::encryptString($this->id));
         return Crypt::encryptString($this->id);
     }
 

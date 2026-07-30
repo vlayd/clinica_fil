@@ -23,6 +23,9 @@ class EmployeForm
                 Section::make('Detalhes Pessoais')
                     ->schema([
                         FormHelper::inputImageUpload(),
+                        FormHelper::inputGender()->extraAttributes([
+                            'class' => 'flex justify-center items-center',
+                        ]),
                         Group::make([
                             TextInput::make('name')
                                 ->required()
@@ -46,14 +49,18 @@ class EmployeForm
                             ToggleButtons::make('active')->label('Usuário')->default(UserStatus::Não)->inline()
                                 ->options(UserStatus::class),
                         ])->columns(2),
-                    ]),
+                    ])
+                    // O usuário pode alterar as informação de acesso dos outros, só não a dele, exceto se super_admin
+                    ->hidden(fn ($record) => !auth()->user()?->hasRole('super_admin') && $record->id == auth()->user()->id),
                 Section::make('Informações Importantes')
                     ->schema([
                         Group::make([
                             Select::make('positions')
-                            ->relationship('positions', 'name')->preload(),
+                                ->relationship('positions', 'name')->preload(),
                         ])->columns(2),
-                    ]),
+                    ])
+                    // O usuário pode alterar as informação importantes dos outros, só não a dele, exceto se super_admin
+                    ->hidden(fn ($record) => !auth()->user()?->hasRole('super_admin') && $record->id == auth()->user()->id),
                 Hidden::make('password')
                     ->dehydrateStateUsing(function ($state, Get $get) {
                         // Garante que o dado salvo não seja nulo caso o usuário não interaja

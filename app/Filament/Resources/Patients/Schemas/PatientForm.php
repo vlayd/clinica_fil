@@ -23,6 +23,9 @@ class PatientForm
                 Section::make('Detalhes Pessoais')
                     ->schema([
                         FormHelper::inputImageUpload(),
+                        FormHelper::inputGender()->extraAttributes([
+                            'class' => 'flex justify-center items-center',
+                        ]),
                         Group::make([
                             TextInput::make('name')
                                 ->required()
