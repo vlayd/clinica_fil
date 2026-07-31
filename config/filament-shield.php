@@ -2,8 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Filament\Resources\Agreements\AgreementResource;
 use App\Filament\Resources\Employes\EmployeResource;
+use App\Filament\Resources\Enterprises\EnterpriseResource;
 use App\Filament\Resources\Patients\PatientResource;
+use App\Filament\Resources\Positions\PositionResource;
 use App\Filament\Resources\Users\UserResource;
 use BezhanSalleh\FilamentShield\Resources\Roles\RoleResource;
 use Filament\Pages\Dashboard;
@@ -189,6 +192,29 @@ return [
     'resources' => [
         'subject' => 'model',
         'manage' => [
+            AgreementResource::class => [
+                'viewAny',
+                'view',
+                'create',
+                'update',
+                'delete',
+            ],
+
+            PositionResource::class => [
+                'viewAny',
+                'view',
+                'create',
+                'update',
+                'delete',
+            ],
+
+            EnterpriseResource::class => [
+                'viewAny',
+                'view',
+                'create',
+                'update',
+            ],
+
             RoleResource::class => [
                 'viewAny',
                 'view',
