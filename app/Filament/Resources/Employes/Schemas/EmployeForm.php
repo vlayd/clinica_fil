@@ -51,7 +51,7 @@ class EmployeForm
                         ])->columns(2),
                     ])
                     // O usuário pode alterar as informação de acesso dos outros, só não a dele, exceto se super_admin
-                    ->hidden(fn ($record) => !auth()->user()?->hasRole('super_admin') && $record->id == auth()->user()->id),
+                    ->hidden(fn($record) => !auth()->user()?->hasRole('super_admin') && $record->id == auth()->user()->id),
                 Section::make('Informações Importantes')
                     ->schema([
                         Group::make([
@@ -60,7 +60,7 @@ class EmployeForm
                         ])->columns(2),
                     ])
                     // O usuário pode alterar as informação importantes dos outros, só não a dele, exceto se super_admin
-                    ->hidden(fn ($record) => !auth()->user()?->hasRole('super_admin') && $record->id == auth()->user()->id),
+                    ->hidden(fn($record) => !auth()->user()?->hasRole('super_admin') && $record->id == auth()->user()->id),
                 Hidden::make('password')
                     ->dehydrateStateUsing(function ($state, Get $get) {
                         // Garante que o dado salvo não seja nulo caso o usuário não interaja
