@@ -67,4 +67,9 @@ class Patient extends Authenticatable
     {
         return $this->belongsTo(Enterprise::class);
     }
+
+    public function responsible()
+    {
+        return $this->hasOne(Responsible::class);
+    }
 }

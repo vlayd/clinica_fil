@@ -8,10 +8,12 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ToggleButtons;
+use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextInputColumn;
 
 class PatientForm
 {
@@ -27,14 +29,18 @@ class PatientForm
                             'class' => 'flex justify-center items-center',
                         ]),
                         Group::make([
-                            TextInput::make('name')
-                                ->required()
-                                ->label('Nomes'),
+                            FormHelper::inputName(),
                             FormHelper::inputCpf(),
                             TextInput::make('birth')
                                 ->type('date')
                                 ->label('Nascimento'),
                         ])->columns(3),
+                        Fieldset::make('Responsável')->columns(2)
+                            ->relationship('responsible')
+                                ->schema([
+                                    FormHelper::inputDefault('name', 'Nome'),
+                                    FormHelper::inputCpfDefault(),
+                                ]),
                     ]),
                 Section::make('Contatos')
                     ->schema([
@@ -53,6 +59,8 @@ class PatientForm
                 Section::make('Informações Importantes')
                     ->schema([
                         Group::make([
+                            Select::make('agreements')
+                            ->relationship('agreements', 'name')->multiple()->preload(),
                             Select::make('agreements')
                             ->relationship('agreements', 'name')->multiple()->preload(),
                         ])->columns(2),

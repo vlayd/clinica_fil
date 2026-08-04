@@ -10,6 +10,7 @@ use Filament\Schemas\Components\Utilities\Set;
 use App\Enums\BrazilianState;
 use App\Enums\Gender;
 use App\Enums\SocialLinkType;
+use App\Rules\CpfRuleDefault;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Repeater\TableColumn;
@@ -54,6 +55,38 @@ class FormHelper
             ->directory('enterprises')
             ->image()
             ->label($label);
+    }
+
+    public static function inputCpfDefault($make = "cpf")
+    {
+        return TextInput::make($make)
+            ->label('CPF')
+            ->mask('999.999.999-99')
+            ->live(debounce: 500)// Adiciona a validação ao enviar o formulário, garantindo que o CPF seja único no banco de dados
+            ->afterStateUpdated(function (?string $state, TextInput $component) {
+                if (blank($state)) {
+                    return;
+                }
+                // Remove caracteres não numéricos do CPF
+                $cpf = preg_replace('/[^0-9]/', '', (string) $state);
+                if (strlen($cpf) === 11) {
+                    // Remove erros anteriores caso o usuário corrija o CPF depois de errar ou dispara outro erro
+                    $component->getLivewire()->resetErrorBag($component->getStatePath());
+                    // Cria um validador manual do Laravel aplicando a sua Rule personalizada
+                    $validator = Validator::make(
+                        ['cpf' => $state],
+                        ['cpf' => [new CpfRuleDefault()]],
+                    );
+
+                    if ($validator->fails()) {
+                        // Dispara o erro da Rule personalizada
+                        $component->getLivewire()->addError($component->getStatePath(), $validator->errors()->first('cpf'));
+                        return;
+                    }
+                }
+            })
+            ->dehydrated(false)
+            ->rule([new CpfRuleDefault]);
     }
 
     public static function inputCpf()
@@ -245,9 +278,9 @@ class FormHelper
             ]);
     }
 
-    public static function inputName()
+    public static function inputName($make = "name")
     {
-        return TextInput::make('name')
+        return TextInput::make($make)
             ->string()
             ->required()
             ->label('Nome')
