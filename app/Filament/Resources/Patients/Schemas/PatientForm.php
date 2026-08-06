@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Patients\Schemas;
 
 use App\Enums\UserStatus;
 use App\Filament\Resources\Helpers\FormHelper;
+use App\Models\Agreement;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -13,6 +14,7 @@ use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\TextInputColumn;
 
 class PatientForm
@@ -37,10 +39,10 @@ class PatientForm
                         ])->columns(3),
                         Fieldset::make('Responsável')->columns(2)
                             ->relationship('responsible')
-                                ->schema([
-                                    FormHelper::inputDefault('name', 'Nome'),
-                                    FormHelper::inputCpfDefault(),
-                                ]),
+                            ->schema([
+                                FormHelper::inputDefault('name', 'Nome'),
+                                FormHelper::inputCpfDefault(),
+                            ]),
                     ]),
                 Section::make('Contatos')
                     ->schema([
@@ -59,10 +61,11 @@ class PatientForm
                 Section::make('Informações Importantes')
                     ->schema([
                         Group::make([
-                            Select::make('agreements')
-                            ->relationship('agreements', 'name')->multiple()->preload(),
-                            Select::make('agreements')
-                            ->relationship('agreements', 'name')->multiple()->preload(),
+                            // Select::make('agreement_id')
+                            //     ->relationship('agreements', 'name')->multiple()->preload(),
+                            Select::make('responsible.agreements')->options(Agreement::all()->pluck('name', 'id'))->label('Convênios')
+                            // ->relationship('responsible', 'agreements')
+                               ->multiple()->preload(),
                         ])->columns(2),
                     ]),
                 Hidden::make('password')

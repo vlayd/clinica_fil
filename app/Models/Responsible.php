@@ -13,11 +13,16 @@ class Responsible extends Model
     use SoftDeletes, HasRoles;
 
     protected $fillable = [
-        'patient_id ',
         'name',
+        'agreements',
+        'patient_id',
         'cpf',
         'documents',
         'description',
+    ];
+
+    protected $casts = [
+        'agreements' => 'array',
     ];
 
     public function patient()
@@ -25,7 +30,7 @@ class Responsible extends Model
         return $this->belongsToMany(Patient::class);
     }
 
-    public function agreements()
+    public function agreement()
     {
         return $this->belongsToMany(Agreement::class);
     }

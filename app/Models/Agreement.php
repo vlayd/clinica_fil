@@ -15,13 +15,8 @@ class Agreement extends Model
         'description',
     ];
 
-    public function patients()
+    public function responsible()
     {
-        return $this->belongsToMany(Patient::class);
-    }
-
-    public function responsibles()
-    {
-        return $this->hasMany(Responsible::class);
+        return $this->belongsToMany(Responsible::class);
     }
 }
